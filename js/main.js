@@ -29,15 +29,23 @@ components:
 		- we need a method that iterates it
 */
 
-	var snake = {
-		createBoard: function() {
+
+var model = {
+	createBoard: function() {
 			var canvas = document.getElementById("canvas");
 				context = canvas.getContext("2d");
 			  context.fillStyle = "#fff";
 			  return context;
-		},
+		}
+}
+
+
+
+
+	var snake = {
+
 		createSnake: function(input, x, y) {
-				var context = this.createBoard();
+				var context = model.createBoard();
 			  context.clearRect(0, 0, 500, 500)
 			 	context.fillRect(250 + x, 250 + y, 10, 10);
 		}
