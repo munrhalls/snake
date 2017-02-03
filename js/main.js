@@ -30,66 +30,46 @@ components:
 */
 
 	var snake = {
-		setDirection: function(direction) {
-		},
-		createSnake: function(x, y) {
+		createBoard: function() {
 			var canvas = document.getElementById("canvas");
-			context = canvas.getContext("2d");
-		  context.fillStyle = "#fff";
-		  context.fillRect(x, y, 10, 10);
-		},
-		moveSnake: function(direction) {
-				x = 250;
-				y = 250;
-				var canvas = document.getElementById("canvas");
 				context = canvas.getContext("2d");
 			  context.fillStyle = "#fff";
-
-			setInterval(function() {
-				context.fillRect(x, y, 10, 10);
-				context.clearRect(x - 10, y, 10, 10);
-				x += 10;
-				console.log(x)
-			}, 1000, direction)
-		}
-	};
-
-	var controller = {
-		parseInput: function(input) {
-			switch (input + "") {
-				case "37":
-					return "left";
-					break;
-				case "38":
-					return "up";
-					break;
-				case "39":
-					return "right";
-					break;
-				case "40":
-					return "down";
-					break;
-				default:
-					return "right";
-					break;
-			}
+			  return context;
 		},
-		processInput: function(input) {
-			var direction = controller.parseInput(input);
-			snake.moveSnake(direction);
-			console.log(direction)
+		createSnake: function(input, x, y) {
+				var context = this.createBoard();
+			  context.clearRect(0, 0, 500, 500)
+			 	context.fillRect(250 + x, 250 + y, 10, 10);
 		}
 	};
 
 document.addEventListener("DOMContentLoaded", function(event) {
-			var input;
-			snake.moveSnake(input);
+			var input = 39;
+			var x = 0;
+			var y = 0;
+
 			document.addEventListener("keydown", function(e){
 				input = e.keyCode;
-				console.log(input)
-				snake.moveSnake(input);
+			});
 
-		});
+			setInterval(function() {
+				if (input === 37) {
+					x -= 10;
+				}
+				else if (input === 38) {
+					y -= 10;
+				}
+				else if (input === 39) {
+					x += 10;
+				}
+				else if(input === 40) {
+					y += 10;
+				} else {
+					x += 10;
+				}
+				snake.createSnake(input, x, y);
+			}, 400, input, x, y);
+
 });
 
 
