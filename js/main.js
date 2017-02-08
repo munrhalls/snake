@@ -60,26 +60,10 @@ snake
 
 document.addEventListener("DOMContentLoaded", function(event) {
 
-	var model = {
-		createBoard: function() {
-				var canvas = document.getElementById("canvas");
-					context = canvas.getContext("2d");
-				  context.fillStyle = "#fff";
-				  return context;
-			},
-		generateFood: function() {
-			var food = []
-			food.push(Math.floor(Math.random() * 50) * 10)
-			food.push(Math.floor(Math.random() * 50) * 10)
-			var context = model.createBoard();
-			context.fillStyle = "#f9ff9f";
-			context.fillRect(food[0], food[1], 10, 10);
-		}
-	};
-
 	var snake = {
 		createSnake: function(x, y, sizeX, sizeY) {
-		 	context.fillRect(250 + x, 250 + y, 10, 10);
+			context.fillStyle = "#fff";
+		 	context.fillRect(250 + x, 250 + y, 10 + sizeX, 10 + sizeY);
 		},
 		clearSnake: function(x, y, size) {
 			context.clearRect(250 + x, 250 + y, 10 , 10);
@@ -88,9 +72,17 @@ document.addEventListener("DOMContentLoaded", function(event) {
 
 
 		},
+		checkFood: function(x, y, food) {
+			console.log(food[0], food[1])
+			console.log(250 + x, 250 + y)
+
+			if (250 + x === food[0] && 250 + y === food[1]) {
+				alert(" ");
+			}
+		},
 		updateSnake: function() {
 			frames++
-			if (frames % 10 === 0) {
+			if (frames % 8 === 0) {
 				if (input === 37) {
 					snake.clearSnake(x, y);
 					x -= 10;
@@ -112,32 +104,57 @@ document.addEventListener("DOMContentLoaded", function(event) {
 					snake.createSnake(x, y);
 				}
 			}
-			window.requestAnimationFrame(snake.updateSnake);
 		}
 	};
 
 
+	var model = {
+		createBoard: function() {
+				var canvas = document.getElementById("canvas");
+					context = canvas.getContext("2d");
+				  context.fillStyle = "#fff";
+				  return context;
+			},
+		foodLocation: ["", ""],
+		generateFoodLocation: function() {
+			this.foodLocation[0] = (Math.floor(Math.random() * 50) * 10);
+			this.foodLocation[1] = (Math.floor(Math.random() * 50) * 10);
+		},
+		generateFood: function() {
+
+			if (this.foodLocation[0] === 250 + x && this.foodLocation[1] === 250 + y)  {
+				model.generateFoodLocation();
+			}
+
+			context.fillStyle = "#f9ff9f";
+			context.fillRect(this.foodLocation[0], this.foodLocation[1], 10, 10);
+
+		},
+		runGame: function() {
+			model.createBoard();
+			model.generateFood();
+			snake.updateSnake();
+
+		window.requestAnimationFrame(model.runGame);
+		}
+
+	}
 
 	document.addEventListener("keydown", function(e){
 		input = e.keyCode;
 	});
 
-	var food = []
-	food.push(Math.floor(Math.random() * 50) * 10)
-	food.push(Math.floor(Math.random() * 50) * 10)
-	var context = model.createBoard();
-	context.fillStyle = "#f9ff9f";
-	context.fillRect(food[0], food[1], 10, 10);
-
-
 	var input = 39;
 	var x = 0;
 	var y = 0;
 	var frames = 0;
-	var context = model.createBoard();
-	snake.updateSnake();
 
-	window.requestAnimationFrame(snake.updateSnake);
+	model.generateFoodLocation();
+	model.runGame();
+
+
+
+	window.requestAnimationFrame(model.runGame);
 
 });
 
