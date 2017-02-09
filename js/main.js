@@ -61,21 +61,15 @@ snake
 document.addEventListener("DOMContentLoaded", function(event) {
 
 	var snake = {
-		createSnake: function(x, y, sizeX, sizeY) {
+		createSnake: function(x, y) {
 			context.fillStyle = "#fff";
-		 	context.fillRect(x, y, 10 + sizeX, 10 + sizeY);
+		 	context.fillRect(x, y, 10, 10);
  			},
-		clearSnake: function(x, y, size) {
-			context.clearRect(x, y, 10 , 10);
+		clearSnake: function() {
+			context.clearRect(0, 0, 500 , 500);
 		},
-		trackSnake: function() {
-
-
-		},
+		snakeBlocks: [],
 		checkFood: function(x, y) {
-			// console.log(food[0], food[1])
-			// console.log(250 + x, 250 + y)
-
 			if (x === model.foodLocation[0] && y === model.foodLocation[1]) {
 					return true;
 			} else {
@@ -83,63 +77,33 @@ document.addEventListener("DOMContentLoaded", function(event) {
 			}
 		},
 
-// na 250 y
-// sizeX 10
-// 240, 250 x
-//
-
-
-
 		updateSnake: function() {
 
-				if (input === 37) {
-					if (sizeY > 0) {
-						sizeY -= 10;
-						sizeX = foodCount;
-					}
-					snake.clearSnake(x + sizeX, y, sizeX, sizeY);
-					x -= 10;
-					snake.createSnake(x, y, sizeX, sizeY);
-				}
-				else if (input === 38) {
-					if (sizeX > 0) {
-						sizeX -= 10;
-						sizeY = foodCount;
+			x += 10;
 
-					}
-					snake.clearSnake(x, y + sizeY, sizeX, sizeY);
-					y -= 10;
-					snake.createSnake(x, y, sizeX, sizeY);
+			var snakeLength = 5;
 
-				}
-				else if (input === 39) {
-					if (sizeY > 0) {
-						sizeY -= 10;
-						sizeX = foodCount;
-					}
-					snake.clearSnake(x, y, sizeX, sizeY);
-					x += 10;
-					snake.createSnake(x, y, sizeX, sizeY);
-				}
-				else if(input === 40) {
-					if (sizeX > 0) {
-						sizeX -= 10;
-						sizeY = foodCount;
-					}
-					snake.clearSnake(x, y, sizeX, sizeY);
-					y += 10;
-					snake.createSnake(x, y, sizeX, sizeY);
-				}
+			for (var i = 0; i < snakeLength; i++) {
+				this.snakeBlocks.push([]);
+				this.snakeBlocks[i].push(x, y);
+			}
 
-				if (snake.checkFood(x, y)) {
-					sizeX += 10;
-					sizeY += 10;
-					foodCount += 10;
-					alert(" ")
-				}
-				console.log(foodCount);
+			snake.snakeBlocks.pop();
+			snake.snakeBlocks.unshift([x, y]);
+
+
+
+
+
+			for (var i = 0; i < snakeLength; i++) {
+				snake.createSnake(this.snakeBlocks[i][0], this.snakeBlocks[i][1], 10, 10);
+
+				console.log(this.snakeBlocks[i][0]);
+			}
+
+
 		}
-	};
+	}
 
 
 	var model = {
@@ -149,6 +113,14 @@ document.addEventListener("DOMContentLoaded", function(event) {
 				  context.fillStyle = "#fff";
 				  return context;
 			},
+		gridRows: [""],
+		gridCols: [""],
+		generateGrid: function() {
+
+			for (var i = 0; i <= 490; i += 10) {
+				this.gridRows.push(i);
+			}
+		},
 		foodLocation: ["", ""],
 		generateFoodLocation: function() {
 			this.foodLocation[0] = (Math.floor(Math.random() * 50) * 10);
@@ -167,8 +139,9 @@ document.addEventListener("DOMContentLoaded", function(event) {
 		runGame: function() {
 			frames++;
 
-			if (frames % 10 === 0) {
-				model.generateFood();
+			model.generateFood();
+			if (frames % 120 === 0) {
+				snake.clearSnake();
 				snake.updateSnake();
 			}
 
@@ -192,6 +165,7 @@ document.addEventListener("DOMContentLoaded", function(event) {
 	model.createBoard();
 	model.generateFoodLocation();
 	model.runGame();
+
 
 
 
