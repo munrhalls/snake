@@ -1,6 +1,29 @@
-canvas {
-	display: block;
-	border: 1px solid #323232;
+* {
+	box-sizing: padding-box;
+}
+
+.container {
+	position: relative;
+	width: 1050px;
 	margin: 0 auto;
-	background-color: #223;
+}
+
+
+#canvas {
+	display: block;
+	position: absolute;
+	top: 0px;
+	left: calc(50% - 252.5px);
+	border: 5px solid #000;
+	margin: 0 auto;
+	background-color: ##034a0a;
+}
+
+#grid {
+	position: absolute;
+	padding: 5px;
+	height: 500px;
+	width: 500px;
+	left: calc(50% - 252.5px);
+	z-index: 100;
 }

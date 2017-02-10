@@ -12,7 +12,6 @@ components:
 	- pausing the game on user input
 	- ending the game when the snake hits itself or board edge
 
-
 FOOD
 - generating food element at random location at the start of the game
 - checking if the food element was eaten
@@ -26,13 +25,7 @@ FOOD
 
  and each time the snake its an element
 
-
-
-
 */
-
-
-
 
 /*
 - moving snake
@@ -54,24 +47,47 @@ Objects:
 model,
 snake
 
+ /*
+ - make it pretty
 
+ - implement game over conditions
+ 	- snake hitting itself
+ 	- snake hitting borders of the board
 
+ - implement view
+ 	- score count
+ 	- high score
+ 	- start
+ 	- pause
+ 	- change difficiulty
+
+ /*
+	What's left
  */
+
+
+
 
 document.addEventListener("DOMContentLoaded", function(event) {
 
+
 	var snake = {
 		snakeLength: 1,
+		snakePositionX: 250,
+		snakePositionY: 250,
+		snakeInitialDirection: 39,
 		createSnake: function(x, y) {
-			context.fillStyle = "#fff";
-		 	context.fillRect(x, y, 10, 10);
+		  context.beginPath();
+		 	context.arc(x, y, 5,0,2*Math.PI);
+		 	context.fillStyle = "#01650c";
+		 	context.fill();
  			},
-		clearSnake: function() {
-			context.clearRect(0, 0, 500 , 500);
+		clearSnake: function(x, y) {
+			context.clearRect(0, 0, 500, 500);
 		},
 		snakeBlocks: [],
 		checkFood: function() {
-			if (x === model.foodLocation[0] && y === model.foodLocation[1]) {
+			if (this.snakePositionX === model.foodLocation[0] && this.snakePositionY === model.foodLocation[1]) {
 					return true;
 			}
 			return false;
@@ -79,51 +95,52 @@ document.addEventListener("DOMContentLoaded", function(event) {
 		getSnakeDirection: function(input) {
 
 			if (input === 37) {
-				x -= 10;
+				this.snakePositionX -= 10;
 			} else if(input === 38) {
-				y -= 10;
+				this.snakePositionY -= 10;
 			} else if(input === 39) {
-				x += 10
+				this.snakePositionX += 10
 			} else if (input === 40) {
-				y += 10;
-			} else
-				return null;
+				this.snakePositionY += 10;
+			}
+
 		},
 		updateSnake: function(input) {
 
-			console.log(this.snakeLength + "....");
 			for (var i = 0; i < this.snakeLength; i++) {
 				this.snakeBlocks.push([]);
-				this.snakeBlocks[i].push(x, y);
+				this.snakeBlocks[i].push(this.snakePositionX, this.snakePositionY);
 			}
 
 			this.getSnakeDirection(input);
 			this.snakeBlocks.pop();
-			this.snakeBlocks.unshift([x, y]);
+			this.snakeBlocks.unshift([this.snakePositionX, this.snakePositionY]);
 
 			for (var i = 0; i < this.snakeLength; i++) {
 				this.createSnake(this.snakeBlocks[i][0], this.snakeBlocks[i][1], 10, 10);
 
-				console.log(this.snakeBlocks[i][0]);
 			}
 		}
 	};
 
 	var model = {
+		createGrid: function() {
+			var grid = document.getElementById("grid");
+			for (var i = 0; i < 2500; i++) {
+				var row = document.createElement("div");
+				row.className = "row";
+				row.style.float = "left";
+				row.style.border = "1px solid #000"
+				row.style.width = "8px";
+				row.style.height = "8px"
+				grid.appendChild(row);
+			}
+			console.log("CREATING GRID AGAIN!")
+		},
 		createBoard: function() {
 				var canvas = document.getElementById("canvas");
-					context = canvas.getContext("2d");
-				  context.fillStyle = "#fff";
-				  return context;
+				context = canvas.getContext("2d");
 			},
-		gridRows: [""],
-		gridCols: [""],
-		generateGrid: function() {
-
-			for (var i = 0; i <= 490; i += 10) {
-				this.gridRows.push(i);
-			}
-		},
 		foodLocation: ["", ""],
 		generateFoodLocation: function() {
 			this.foodLocation[0] = (Math.floor(Math.random() * 50) * 10);
@@ -135,15 +152,16 @@ document.addEventListener("DOMContentLoaded", function(event) {
 				snake.snakeLength++;
 				model.generateFoodLocation();
 			}
-			context.fillStyle = "#f9ff9f";
-			context.fillRect(this.foodLocation[0], this.foodLocation[1], 10, 10);
+			context.beginPath();
+			context.fillStyle = "#fff919";
+			context.arc(this.foodLocation[0], this.foodLocation[1], 5, 0.2*Math.PI, false);
+			context.fill();
 		},
 		runGame: function() {
 			frames++;
-
 			model.generateFood();
-			if (frames % 20 === 0) {
-				snake.clearSnake();
+			if (frames % 10 === 0) {
+				snake.clearSnake(snake.snakePositionX, snake.snakePositionY, 10, 10);
 				snake.updateSnake(input);
 			}
 
@@ -151,20 +169,23 @@ document.addEventListener("DOMContentLoaded", function(event) {
 		}
 	};
 
-	var frames = 0;
-	var input = 39;
-	var x = 250;
-	var y = 250;;
+	model.createGrid();
 
+	var frames = 0;
+	var input = snake.snakeInitialDirection;
 
 	document.addEventListener("keydown", function(e){
-		input = e.keyCode;
+		if (e.keyCode === 37 ||e.keyCode === 38 ||e.keyCode === 39 ||e.keyCode === 40) {
+			input = e.keyCode;
+		} else {
+			console.log("Not a snake move command.")
+		}
+
 	});
 
 	model.createBoard();
 	model.generateFoodLocation();
 	model.runGame();
-
 
 	window.requestAnimationFrame(model.runGame);
 
