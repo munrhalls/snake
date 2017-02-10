@@ -76,23 +76,31 @@ document.addEventListener("DOMContentLoaded", function(event) {
 				return false;
 			}
 		},
+		getSnakeDirection: function(input) {
+			if (input === 37) {
+				x -= 10;
+			} else if(input === 38) {
+				y -= 10;
+			} else if(input === 39) {
+				x += 10
+			} else if (input === 40) {
+				y += 10;
+			} else
+				return null;
+		},
+		updateSnake: function(input) {
 
-		updateSnake: function() {
+			var snakeLength = 10;
 
-			x += 10;
+			for (var i = 0; i <                                                         snakeLength; i++) {
 
-			var snakeLength = 5;
-
-			for (var i = 0; i < snakeLength; i++) {
 				this.snakeBlocks.push([]);
 				this.snakeBlocks[i].push(x, y);
 			}
 
+			this.getSnakeDirection(input);
 			snake.snakeBlocks.pop();
 			snake.snakeBlocks.unshift([x, y]);
-
-
-
 
 
 			for (var i = 0; i < snakeLength; i++) {
@@ -100,7 +108,6 @@ document.addEventListener("DOMContentLoaded", function(event) {
 
 				console.log(this.snakeBlocks[i][0]);
 			}
-
 
 		}
 	}
@@ -140,9 +147,9 @@ document.addEventListener("DOMContentLoaded", function(event) {
 			frames++;
 
 			model.generateFood();
-			if (frames % 120 === 0) {
+			if (frames % 10 === 0) {
 				snake.clearSnake();
-				snake.updateSnake();
+				snake.updateSnake(input);
 			}
 
 		window.requestAnimationFrame(model.runGame);
@@ -150,17 +157,16 @@ document.addEventListener("DOMContentLoaded", function(event) {
 
 	}
 
-	document.addEventListener("keydown", function(e){
-		input = e.keyCode;
-	});
+
 
 	var input = 39;
 	var x = 250;
 	var y = 250;
-	var foodCount = 0;
-	var sizeX = 0;
-	var sizeY = 0;
 	var frames = 0;
+
+	document.addEventListener("keydown", function(e){
+		input = e.keyCode;
+	});
 
 	model.createBoard();
 	model.generateFoodLocation();
