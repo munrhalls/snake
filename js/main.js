@@ -61,6 +61,7 @@ snake
 document.addEventListener("DOMContentLoaded", function(event) {
 
 	var snake = {
+		snakeLength: 1,
 		createSnake: function(x, y) {
 			context.fillStyle = "#fff";
 		 	context.fillRect(x, y, 10, 10);
@@ -69,14 +70,14 @@ document.addEventListener("DOMContentLoaded", function(event) {
 			context.clearRect(0, 0, 500 , 500);
 		},
 		snakeBlocks: [],
-		checkFood: function(x, y) {
+		checkFood: function() {
 			if (x === model.foodLocation[0] && y === model.foodLocation[1]) {
 					return true;
-			} else {
-				return false;
 			}
+			return false;
 		},
 		getSnakeDirection: function(input) {
+
 			if (input === 37) {
 				x -= 10;
 			} else if(input === 38) {
@@ -90,28 +91,23 @@ document.addEventListener("DOMContentLoaded", function(event) {
 		},
 		updateSnake: function(input) {
 
-			var snakeLength = 10;
-
-			for (var i = 0; i <                                                         snakeLength; i++) {
-
+			console.log(this.snakeLength + "....");
+			for (var i = 0; i < this.snakeLength; i++) {
 				this.snakeBlocks.push([]);
 				this.snakeBlocks[i].push(x, y);
 			}
 
 			this.getSnakeDirection(input);
-			snake.snakeBlocks.pop();
-			snake.snakeBlocks.unshift([x, y]);
+			this.snakeBlocks.pop();
+			this.snakeBlocks.unshift([x, y]);
 
-
-			for (var i = 0; i < snakeLength; i++) {
-				snake.createSnake(this.snakeBlocks[i][0], this.snakeBlocks[i][1], 10, 10);
+			for (var i = 0; i < this.snakeLength; i++) {
+				this.createSnake(this.snakeBlocks[i][0], this.snakeBlocks[i][1], 10, 10);
 
 				console.log(this.snakeBlocks[i][0]);
 			}
-
 		}
-	}
-
+	};
 
 	var model = {
 		createBoard: function() {
@@ -135,34 +131,31 @@ document.addEventListener("DOMContentLoaded", function(event) {
 		},
 		generateFood: function() {
 
-			if (snake.checkFood(x, y)) {
+			if (snake.checkFood()) {
+				snake.snakeLength++;
 				model.generateFoodLocation();
 			}
-
 			context.fillStyle = "#f9ff9f";
 			context.fillRect(this.foodLocation[0], this.foodLocation[1], 10, 10);
-
 		},
 		runGame: function() {
 			frames++;
 
 			model.generateFood();
-			if (frames % 10 === 0) {
+			if (frames % 20 === 0) {
 				snake.clearSnake();
 				snake.updateSnake(input);
 			}
 
 		window.requestAnimationFrame(model.runGame);
 		}
+	};
 
-	}
-
-
-
+	var frames = 0;
 	var input = 39;
 	var x = 250;
-	var y = 250;
-	var frames = 0;
+	var y = 250;;
+
 
 	document.addEventListener("keydown", function(e){
 		input = e.keyCode;
@@ -171,8 +164,6 @@ document.addEventListener("DOMContentLoaded", function(event) {
 	model.createBoard();
 	model.generateFoodLocation();
 	model.runGame();
-
-
 
 
 	window.requestAnimationFrame(model.runGame);
