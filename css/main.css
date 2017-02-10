@@ -2,28 +2,42 @@
 	box-sizing: padding-box;
 }
 
+body {
+	background-color: #0a2500;
+}
+
 .container {
 	position: relative;
 	width: 1050px;
 	margin: 0 auto;
 }
 
+	#canvas {
+		display: block;
+		position: absolute;
+		top: 75px;
+		left: calc(50% - 252.5px);
+		border: 5px solid #000;
+		margin: 0 auto;
+		background-color: #034a0a;
+	}
 
-#canvas {
-	display: block;
-	position: absolute;
-	top: 0px;
-	left: calc(50% - 252.5px);
-	border: 5px solid #000;
-	margin: 0 auto;
-	background-color: ##034a0a;
-}
+	#grid {
+		display: block;
+		position: absolute;
+		top: 75px;
+		padding: 5px;
+		height: 500px;
+		width: 500px;
+		left: calc(50% - 252.5px);
+		z-index: 100;
+	}
 
-#grid {
-	position: absolute;
-	padding: 5px;
-	height: 500px;
-	width: 500px;
-	left: calc(50% - 252.5px);
-	z-index: 100;
-}
+	#message {
+		display: block;
+		position: absolute;
+		top: 10px;
+		left: calc(50% - 252.5px);
+		color: #fff;
+		font-size: 22px;
+	}

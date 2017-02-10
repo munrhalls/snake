@@ -1,75 +1,13 @@
-/*
-components:
-- moving snake
-	- setting up the snake - a moving square
-	- setting its direction
-	- ending the game if it hits itself or board edge
-	- enlarging the snake when it eats a food element
-
--	controlling the game with user input
-	- starting the game on start button
-	- changing direction on user input
-	- pausing the game on user input
-	- ending the game when the snake hits itself or board edge
-
-FOOD
-- generating food element at random location at the start of the game
-- checking if the food element was eaten
-	- IF NOT - leave it as is
-	- IF YES - remove it, enlarge the snake and:
-		- randomize new location
-		- check if that location isn't occupied by the snake right now
-		- check if it isn't the same as previous location
-		- if both above are false, place food at that location, ELSE
-		- randomize new location again and repeat the steps above
-
- and each time the snake its an element
-
-*/
-
-/*
-- moving snake
-	- setting up the snake - a moving square - requirements:
-		- we need to create the square, then erase it, then re-create it at next location
-		- we need square creation method
-		- we need method to capture user input
-		- we need method that modifies the coordinate modifying method accordingly to user input
-		- we need a method that determines which coordinate needs to be modified based on user input - then returns it
-		- we need a method that determines in what direction is that coordinate modified (ascending or descending) - then returns it
-		- we need a method that takes these two inputs and creates variable with new coordinate
-		- we need a method that inserts this new coordinate into the snake creating function
-		- we need a method that iterates it
-*/
-
-
-/*
-Objects:
-model,
-snake
-
- /*
- - make it pretty
-
- - implement game over conditions
- 	- snake hitting itself
- 	- snake hitting borders of the board
-
- - implement view
- 	- score count
- 	- high score
- 	- start
- 	- pause
- 	- change difficiulty
-
- /*
-	What's left
- */
-
-
-
-
 document.addEventListener("DOMContentLoaded", function(event) {
 
+
+	var display = {
+		displayMessage: function(msg) {
+			var msgElement = document.getElementById("message");
+			msgElement.innerHTML = msg;
+		}
+
+	};
 
 	var snake = {
 		snakeLength: 1,
@@ -79,10 +17,10 @@ document.addEventListener("DOMContentLoaded", function(event) {
 		createSnake: function(x, y) {
 		  context.beginPath();
 		 	context.arc(x, y, 5,0,2*Math.PI);
-		 	context.fillStyle = "#01650c";
+		 	context.fillStyle = "#13c512";
 		 	context.fill();
  			},
-		clearSnake: function(x, y) {
+		clearSnake: function() {
 			context.clearRect(0, 0, 500, 500);
 		},
 		snakeBlocks: [],
@@ -107,6 +45,16 @@ document.addEventListener("DOMContentLoaded", function(event) {
 		},
 		updateSnake: function(input) {
 
+			var ignoreFood;
+
+			if (snake.checkFood()) {
+				model.generateFoodLocation();
+				snake.snakeLength++;
+				ignoreFood = 1;
+			} else {
+				ignoreFood = 0;
+			}
+
 			for (var i = 0; i < this.snakeLength; i++) {
 				this.snakeBlocks.push([]);
 				this.snakeBlocks[i].push(this.snakePositionX, this.snakePositionY);
@@ -116,14 +64,18 @@ document.addEventListener("DOMContentLoaded", function(event) {
 			this.snakeBlocks.pop();
 			this.snakeBlocks.unshift([this.snakePositionX, this.snakePositionY]);
 
+			controller.checkCollision(snake.snakeBlocks, ignoreFood);
+
 			for (var i = 0; i < this.snakeLength; i++) {
 				this.createSnake(this.snakeBlocks[i][0], this.snakeBlocks[i][1], 10, 10);
-
 			}
+
+
 		}
 	};
 
 	var model = {
+		frames: 0,
 		createGrid: function() {
 			var grid = document.getElementById("grid");
 			for (var i = 0; i < 2500; i++) {
@@ -148,46 +100,73 @@ document.addEventListener("DOMContentLoaded", function(event) {
 		},
 		generateFood: function() {
 
-			if (snake.checkFood()) {
-				snake.snakeLength++;
-				model.generateFoodLocation();
-			}
 			context.beginPath();
 			context.fillStyle = "#fff919";
 			context.arc(this.foodLocation[0], this.foodLocation[1], 5, 0.2*Math.PI, false);
 			context.fill();
 		},
+		prepareGame: function() {
+			model.createGrid();
+			model.createBoard();
+			model.generateFoodLocation();
+		},
 		runGame: function() {
-			frames++;
-			model.generateFood();
-			if (frames % 10 === 0) {
-				snake.clearSnake(snake.snakePositionX, snake.snakePositionY, 10, 10);
+			model.frames++;
+
+			if (model.frames % 10 === 0) {
+				snake.clearSnake();
+				model.generateFood();
 				snake.updateSnake(input);
+
 			}
 
 		window.requestAnimationFrame(model.runGame);
 		}
 	};
 
-	model.createGrid();
+	var controller = {
+		gameOver: false,
+		checkCollision: function(snakeBlocks, ignoreFood) {
+			var currentLocation = snakeBlocks[0];
 
-	var frames = 0;
+			this.checkWalls(currentLocation);
+
+			for (var i = 1 + ignoreFood; i < snake.snakeLength; i++) {
+				if (currentLocation[0] === snakeBlocks[i][0] && currentLocation[1] === snakeBlocks[i][1]) {
+				controller.gameOver = true;
+
+				display.displayMessage("Your snake has hit itself! It's all over!!!");
+				}
+			}
+		},
+		checkWalls: function(currentLocation) {
+			if (currentLocation[0]  <= 0 || currentLocation[1]  <= 0
+				|| currentLocation[0] > 490 || currentLocation[1] > 490) {
+				controller.gameOver = true;
+				display.displayMessage("Your snake has hit a wall! Game over!!!");
+			}
+		}
+	};
+
 	var input = snake.snakeInitialDirection;
 
 	document.addEventListener("keydown", function(e){
-		if (e.keyCode === 37 ||e.keyCode === 38 ||e.keyCode === 39 ||e.keyCode === 40) {
-			input = e.keyCode;
+		if (!controller.gameOver) {
+			if (e.keyCode === 37 ||e.keyCode === 38 ||e.keyCode === 39 ||e.keyCode === 40) {
+				input = e.keyCode;
+			}
 		} else {
-			console.log("Not a snake move command.")
+			input = null;
 		}
-
 	});
 
-	model.createBoard();
-	model.generateFoodLocation();
-	model.runGame();
+	model.prepareGame();
 
-	window.requestAnimationFrame(model.runGame);
+model.runGame();
+	if (!controller.gameOver) {
+
+		window.requestAnimationFrame(model.runGame);
+	}
 
 });
 
