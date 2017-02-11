@@ -16,19 +16,20 @@ document.addEventListener("DOMContentLoaded", function(event) {
 
 	var snake = {
 		snakeLength: 1,
+		snakePathSize: 10,
 		snakePositionX: 250,
 		snakePositionY: 250,
 		snakeInitialDirection: 39,
 		userControl: 39,
 		snakeSize: 8,
-		snakePathSize: 10,
 		snakeColor: "#13c512",
 
 		createSnake: function(x, y) {
 			this.snakeLife();
 		  context.beginPath();
 		  context.fillStyle = this.snakeColor;
-		 	context.arc(x, y, this.snakeSize, 0,2*Math.PI);
+		  console.log(x, y);
+		 	context.arc(x, y, this.snakeSize, 0,2*Math.PI, false);
 		 	context.fill();
  			},
 		snakeLife: function() {
@@ -61,11 +62,10 @@ document.addEventListener("DOMContentLoaded", function(event) {
 				this.snakePositionY += this.snakePathSize;
 				snake.userControlPrevious = 40;
 			}
-
 		},
 		eat: function() {
 			if (snake.checkFood()) {
-				model.generateFoodLocation();
+				model.generateFoodLocation(model.squaresPerRow);
 				snake.snakeLength++;
 				snake.snakeColor = "#fff";
 				return 1;
@@ -101,8 +101,10 @@ document.addEventListener("DOMContentLoaded", function(event) {
 		foodColor: "#fff919",
 		foodSize: 7.5,
 		gridSize: 10,
+		squaresPerRow: 50,
 		squaresNum: "",
 		gameSize: "normal",
+		gameSpeed: 10,
 		isGridSizeValid: function() {
 
 			if (250000 % this.gridSize === 0) {
@@ -116,14 +118,17 @@ document.addEventListener("DOMContentLoaded", function(event) {
 				console.log("This grid square size is not valid!");
 			}
 
-			for (var i = 0; i * (this.gridSize) < 250000 / (this.gridSize); i++) {
+			for (var i = 0; i * this.gridSize < 250000 / this.gridSize; i++) {
 				this.squaresNum = i;
 			}
+
+			var squaresPerRow = Math.floor(Math.sqrt(model.squaresNum));
+			model.squaresPerRow = squaresPerRow;
+
 		},
 		createGrid: function() {
 			var grid = document.getElementById("grid");
 			this.calcGridSquares();
-			console.log(this.squaresNum)
 
 			for (var i = 0; i <= this.squaresNum; i++) {
 				var cell = document.createElement("div");
@@ -141,16 +146,19 @@ document.addEventListener("DOMContentLoaded", function(event) {
 				context = canvas.getContext("2d");
 			},
 		foodLocation: ["", ""],
-		generateFoodLocation: function() {
-
-			this.foodLocation[0] = (Math.floor(Math.random() * 46) * snake.snakePathSize);
-			this.foodLocation[1] = (Math.floor(Math.random() * 46) * snake.snakePathSize);
+		generateFoodLocation: function(squaresPerRow) {
+			console.log(squaresPerRow)
+			this.foodLocation[0] = (Math.floor(Math.random()	* (squaresPerRow - 1)) + 1) * this.gridSize - this.gridSize / 2
+			this.foodLocation[1] = (Math.floor(Math.random()	* (squaresPerRow - 1)) + 1) * this.gridSize - this.gridSize / 2
+			console.log(this.foodLocation[0])
+			console.log(this.foodLocation[1])
 		},
 		generateFood: function() {
+
 			this.styleFood();
 			context.beginPath();
 			context.fillStyle = this.foodColor;
-			context.arc(this.foodLocation[0], this.foodLocation[1], this.foodSize, 0.2*Math.PI, false);
+			context.arc(this.foodLocation[0], this.foodLocation[1], this.foodSize, 0.2 * Math.PI, false);
 			context.fill();
 		},
 		styleFood: function() {
@@ -166,7 +174,7 @@ document.addEventListener("DOMContentLoaded", function(event) {
 		prepareGame: function() {
 			model.createGrid();
 			model.createBoard();
-			model.generateFoodLocation();
+			model.generateFoodLocation(model.squaresPerRow);
 		}
 	};
 
@@ -198,27 +206,33 @@ document.addEventListener("DOMContentLoaded", function(event) {
 				model.gridSize = 10;
 				model.foodSize = 7.5;
 				snake.snakeSize = 7.5;
+				snake.snakePositionX = 245;
+				snake.snakePositionY = 245;
 				snake.snakePathSize = 10;
 			} else if (model.gameSize === "large") {
-				console.log("!!!")
 				model.gridSize = 20;
-				model.foodSize = 9;
-				model.snakeSize = 9;
+				model.foodSize = 10;
+				snake.snakeSize = 10;
 				snake.snakePathSize = 20;
 			} else if (model.gameSize = "gargantuan") {
-				model.gridSize = 25;
-				model.foodSize = 11;
-				model.snakeSize = 11;
+
+				model.gridSize = 50;
+				model.foodSize = 25;
+				model.gameSpeed = 30;
+				snake.snakeSize = 25;
+				snake.snakePositionX = 225;
+				snake.snakePositionY = 225;
+				snake.snakePathSize = 50;
 			}
+
 		},
 		runGame: function() {
 			model.frames++;
 
-			if (model.frames % 10 === 0 && !controller.gameOver) {
+			if (model.frames % model.gameSpeed === 0 && !controller.gameOver) {
 				snake.clearSnake();
-				snake.updateSnake(snake.userControl);
 				model.generateFood();
-
+				snake.updateSnake(snake.userControl);
 			}
 
 		window.requestAnimationFrame(controller.runGame);
@@ -238,7 +252,6 @@ document.addEventListener("DOMContentLoaded", function(event) {
 				snake.userControl = snake.userControlPrevious;
 		}
 	});
-
 
 		controller.changeSize("normal");
 		model.prepareGame();
