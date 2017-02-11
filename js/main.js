@@ -14,6 +14,7 @@ document.addEventListener("DOMContentLoaded", function(event) {
 		snakePositionX: 250,
 		snakePositionY: 250,
 		snakeInitialDirection: 39,
+		userControl: 39,
 		createSnake: function(x, y) {
 		  context.beginPath();
 		 	context.arc(x, y, 5,0,2*Math.PI);
@@ -30,37 +31,37 @@ document.addEventListener("DOMContentLoaded", function(event) {
 			}
 			return false;
 		},
-		getSnakeDirection: function(input) {
-
-			if (input === 37) {
+		getSnakeDirection: function() {
+			if (snake.userControl === 37) {
 				this.snakePositionX -= 10;
-			} else if(input === 38) {
+			} else if(snake.userControl === 38) {
 				this.snakePositionY -= 10;
-			} else if(input === 39) {
+			} else if(snake.userControl === 39) {
 				this.snakePositionX += 10
-			} else if (input === 40) {
+			} else if (snake.userControl === 40) {
 				this.snakePositionY += 10;
 			}
 
 		},
-		updateSnake: function(input) {
-
-			var ignoreFood;
-
+		eat: function() {
 			if (snake.checkFood()) {
 				model.generateFoodLocation();
 				snake.snakeLength++;
-				ignoreFood = 1;
+				return 1;
 			} else {
-				ignoreFood = 0;
+				return 0;
 			}
+		},
+		updateSnake: function() {
+
+			var ignoreFood = snake.eat();
 
 			for (var i = 0; i < this.snakeLength; i++) {
 				this.snakeBlocks.push([]);
 				this.snakeBlocks[i].push(this.snakePositionX, this.snakePositionY);
 			}
 
-			this.getSnakeDirection(input);
+			this.getSnakeDirection(snake.userControl);
 			this.snakeBlocks.pop();
 			this.snakeBlocks.unshift([this.snakePositionX, this.snakePositionY]);
 
@@ -69,8 +70,6 @@ document.addEventListener("DOMContentLoaded", function(event) {
 			for (var i = 0; i < this.snakeLength; i++) {
 				this.createSnake(this.snakeBlocks[i][0], this.snakeBlocks[i][1], 10, 10);
 			}
-
-
 		}
 	};
 
@@ -116,7 +115,7 @@ document.addEventListener("DOMContentLoaded", function(event) {
 			if (model.frames % 10 === 0) {
 				snake.clearSnake();
 				model.generateFood();
-				snake.updateSnake(input);
+				snake.updateSnake(snake.userControl);
 
 			}
 
@@ -148,15 +147,14 @@ document.addEventListener("DOMContentLoaded", function(event) {
 		}
 	};
 
-	var input = snake.snakeInitialDirection;
 
 	document.addEventListener("keydown", function(e){
 		if (!controller.gameOver) {
-			if (e.keyCode === 37 ||e.keyCode === 38 ||e.keyCode === 39 ||e.keyCode === 40) {
-				input = e.keyCode;
+			if (e.keyCode === 37 || e.keyCode === 38 || e.keyCode === 39 || e.keyCode === 40) {
+				snake.userControl = e.keyCode;
 			}
 		} else {
-			input = null;
+			snake.userControl = null;
 		}
 	});
 

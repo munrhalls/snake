@@ -41,3 +41,12 @@ body {
 		color: #fff;
 		font-size: 22px;
 	}
+
+	#score {
+		display: block;
+		position: absolute;
+		top: 10px;
+		left: 0;
+		color: #fff;
+		font-size: 22px;
+	}
