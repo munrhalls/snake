@@ -212,6 +212,7 @@ document.addEventListener("DOMContentLoaded", function(event) {
 			} else if (model.gameSize === "large") {
 				model.gridSize = 20;
 				model.foodSize = 10;
+				model.gameSpeed = 25;
 				snake.snakeSize = 10;
 				snake.snakePathSize = 20;
 			} else if (model.gameSize = "gargantuan") {
@@ -253,7 +254,7 @@ document.addEventListener("DOMContentLoaded", function(event) {
 		}
 	});
 
-		controller.changeSize("normal");
+		controller.changeSize("large");
 		model.prepareGame();
 		controller.runGame();
 		window.requestAnimationFrame(controller.runGame);
