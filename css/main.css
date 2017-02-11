@@ -8,7 +8,7 @@ body {
 
 .container {
 	position: relative;
-	width: 1050px;
+	width: 950px;
 	margin: 0 auto;
 }
 
@@ -17,7 +17,8 @@ body {
 		position: absolute;
 		top: 75px;
 		left: calc(50% - 252.5px);
-		border: 5px solid #000;
+		/*border: 1px solid #104201;*/
+		box-shadow: 0 0 10px 5px #104201;
 		margin: 0 auto;
 		background-color: #034a0a;
 	}
@@ -26,20 +27,21 @@ body {
 		display: block;
 		position: absolute;
 		top: 75px;
-		padding: 5px;
-		height: 500px;
-		width: 500px;
+		height: 503px;
+		width: 503px;
 		left: calc(50% - 252.5px);
-		z-index: 100;
+		z-index: 10;
 	}
 
 	#message {
 		display: block;
 		position: absolute;
 		top: 10px;
-		left: calc(50% - 252.5px);
+		left: calc(50% - 231.25px);
+		width: 450px;
 		color: #fff;
 		font-size: 22px;
+		z-index: 20;
 	}
 
 	#score {
