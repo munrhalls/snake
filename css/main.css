@@ -6,6 +6,11 @@ body {
 	background-color: #0a2500;
 }
 
+input,
+button {
+	display: block;
+}
+
 .container {
 	position: relative;
 	width: 950px;
@@ -16,7 +21,7 @@ body {
 		display: block;
 		position: absolute;
 		top: 75px;
-		left: calc(50% - 252.5px);
+		left: calc(50% - 250px);
 		/*border: 1px solid #104201;*/
 		box-shadow: 0 0 10px 5px #104201;
 		margin: 0 auto;
@@ -29,26 +34,102 @@ body {
 		top: 75px;
 		height: 503px;
 		width: 503px;
-		left: calc(50% - 252.5px);
+		left: calc(50% - 250px);
 		z-index: 10;
 	}
 
 	#message {
 		display: block;
 		position: absolute;
-		top: 10px;
-		left: calc(50% - 231.25px);
+		top: 20px;
+		left: calc(50% - 225px);
 		width: 450px;
 		color: #fff;
 		font-size: 22px;
 		z-index: 20;
 	}
 
+	.start-pause-btn {
+		display: block;
+		position: absolute;
+		top: 252.5px;
+		left: calc(50% - 175px) ;
+		padding-bottom: 10px;
+		width: 350px;
+    box-shadow: 0 0 15px 2.5px #fff;
+		text-align: center;
+		color: #22ce11;
+		font-size: 60px;
+		letter-spacing: 6px;
+		background-color: #0a2500;
+		z-index: 100;
+	}
+
+		.start-pause-footnote {
+			padding-top: 5px;
+			display: block;
+			font-size: 11px;
+			line-height: 11px;
+		}
+
 	#score {
 		display: block;
 		position: absolute;
-		top: 10px;
-		left: 0;
-		color: #fff;
+		top: 75px;
+		left: calc(50% - 420px);
+		width: 80px;
+		padding: 20px;
+		box-shadow: 0 0 10px 5px #104201;
+		background-color: #000;
+		color: #22ce11;
 		font-size: 22px;
 	}
+
+	.game-size-label {
+		display: block;
+		position: absolute;
+		top: 75px;
+		left: calc(50% + 340px);
+		width: 100px;
+		padding: 20px;
+		box-shadow: 0 0 10px 5px #104201;
+		background-color: #000;
+		color: #22ce11;
+		text-align: center;
+		font-size: 22px;
+	}
+
+	.game-size-footnote {
+		width: 50px;
+		font-size: 13px;
+
+	}
+
+	#size-options-container {
+		display: none;
+	}
+
+		.size-buttons {
+			display: block;
+			position: absolute;
+			left: calc(50% + 340px);
+			width: 100px;
+			padding: 20px;
+			box-shadow: 0 0 15px 2.5px #fff;
+			background-color: #000;
+			color: #fff;
+			font-size: 22px;
+		}
+
+		#size-option-1 {
+			top: 175px;
+		}
+
+		#size-option-2 {
+			top: 255px;
+		}
+
+		#size-option-3 {
+			top: 335px;
+		}
+
