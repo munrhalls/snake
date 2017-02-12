@@ -6,9 +6,18 @@ document.addEventListener("DOMContentLoaded", function(event) {
 			msgElement.innerHTML = msg;
 			return msgElement;
 		},
+		hideMsg: function(element) {
+			var element = document.querySelector(element);
+			element.style.display = "none";
+		},
+		pauseMsg: function(element) {
+			var element = document.querySelector(element);
+			element.style.innerHTML = "Pause";
+			element.style.display = "block";
+		},
 		displayScore: function(snakeLength) {
 			var scoreElement = document.getElementById("score");
-			scoreElement.innerHTML = "Score: " + snake.snakeLength;
+			scoreElement.innerHTML = "Score: " + snake.snakeLength + " points";
 		},
 		gameOverMsg: function(msg) {
 			var msgElement = this.displayMsg(msg);
@@ -177,18 +186,14 @@ document.addEventListener("DOMContentLoaded", function(event) {
 			} else if (random <= 3) {
 				this.foodColor = "#ccc800";
 			}
-		},
-		prepareGame: function() {
-			model.createGrid();
-			model.createBoard();
-			model.generateFoodLocation(model.squaresPerRow);
 		}
+
 	};
 
 	var controller = {
 		game: "",
 		gameOver: false,
-		gamePaused: false,
+		gamePaused: true,
 		checkCollision: function(snakeBlocks, ignoreFood) {
 			var currentLocation = snakeBlocks[0];
 
@@ -236,10 +241,15 @@ document.addEventListener("DOMContentLoaded", function(event) {
 			}
 
 		},
+		prepareGame: function() {
+			controller.changeSize(model.gameSize);
+			model.createGrid();
+			model.createBoard();
+			model.generateFoodLocation(model.squaresPerRow);
+		},
 		runGame: function() {
 			model.frames++;
-
-			if (model.frames % model.gameSpeed === 0 && !controller.gameOver) {
+			if (model.frames % model.gameSpeed === 0 && !controller.gameOver && !controller.gamePaused) {
 				snake.clearSnake();
 				model.generateFood();
 				snake.updateSnake(snake.userControl);
@@ -247,23 +257,26 @@ document.addEventListener("DOMContentLoaded", function(event) {
 			}
 
 			controller.game = window.requestAnimationFrame(controller.runGame);
+
+
 		},
 		start: function start() {
-			controller.changeSize(model.gameSize);
-			model.prepareGame();
-			if (!controller.game) {
-				controller.runGame();
-			}
+				controller.gamePaused = !controller.gamePaused;
+				if (!controller.gamePaused) {
+					display.hideMsg(".start-pause-btn");
+					controller.prepareGame("Normal");
+					controller.game = window.requestAnimationFrame(controller.runGame);
+				}
 		},
 		stop: function stop() {
 			if (controller.game)  {
+				display.pauseMsg(".start-pause-btn");
 				window.cancelAnimationFrame(controller.game);
-				controller.game = null;
 			}
+			controller.gamePaused = true;
+
 		}
 	};
-
-
 
 
 
@@ -281,7 +294,15 @@ document.addEventListener("DOMContentLoaded", function(event) {
 			 || e.keyCode - snake.userControlPrevious === -2 ) {
 				snake.userControl = snake.userControlPrevious;
 		}
+
+		if (e.keyCode === 13) {
+			controller.stop();
+		}
+
 	}, false);
+
+
+
 
 
 
@@ -303,18 +324,18 @@ document.addEventListener("DOMContentLoaded", function(event) {
 		});
 	};
 
+	var startButton = document.getElementById("start-btn");
+
+	startButton.addEventListener("click", function() {
+		controller.start();
+	}, false);
+
 
 
 
 
 	console.log(model.gameSize)
 
-
-
-
-
-
-	controller.start();
 
 
 

@@ -76,8 +76,9 @@ button {
 		display: block;
 		position: absolute;
 		top: 75px;
-		left: calc(50% - 420px);
-		width: 80px;
+		left: calc(50% - 480px);
+		width: 140px;
+		height: 44px;
 		padding: 20px;
 		box-shadow: 0 0 10px 5px #104201;
 		background-color: #000;
