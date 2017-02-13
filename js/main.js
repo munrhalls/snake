@@ -11,7 +11,7 @@ document.addEventListener("DOMContentLoaded", function(event) {
 			element.style.display = "none";
 		},
 		pauseMsg: function(element) {
-			var element = document.querySelector(element);
+			var element = document.getElementById(element);
 			element.style.innerHTML = "Pause";
 			element.style.display = "block";
 		},
@@ -193,7 +193,7 @@ document.addEventListener("DOMContentLoaded", function(event) {
 	var controller = {
 		game: "",
 		gameOver: false,
-		gamePaused: true,
+		gamePaused: false,
 		checkCollision: function(snakeBlocks, ignoreFood) {
 			var currentLocation = snakeBlocks[0];
 
@@ -249,11 +249,14 @@ document.addEventListener("DOMContentLoaded", function(event) {
 		},
 		runGame: function() {
 			model.frames++;
-			if (model.frames % model.gameSpeed === 0 && !controller.gameOver && !controller.gamePaused) {
-				snake.clearSnake();
-				model.generateFood();
-				snake.updateSnake(snake.userControl);
-				display.displayScore(snake.snakeLength);
+
+			if (model.frames % model.gameSpeed === 0) {
+				if (!controller.gameOver && !controller.gamePaused) {
+					snake.clearSnake();
+					model.generateFood();
+					snake.updateSnake(snake.userControl);
+					display.displayScore(snake.snakeLength);
+				}
 			}
 
 			controller.game = window.requestAnimationFrame(controller.runGame);
@@ -261,19 +264,18 @@ document.addEventListener("DOMContentLoaded", function(event) {
 
 		},
 		start: function start() {
-				controller.gamePaused = !controller.gamePaused;
-				if (!controller.gamePaused) {
-					display.hideMsg(".start-pause-btn");
-					controller.prepareGame("Normal");
-					controller.game = window.requestAnimationFrame(controller.runGame);
-				}
+			console.log("START")
+			// controller.gamePaused = false;
+			// controller.prepareGame("Normal");
+			// controller.runGame();
+			// window.requestAnimationFrame(controller.runGame);
+
 		},
 		stop: function stop() {
-			if (controller.game)  {
-				display.pauseMsg(".start-pause-btn");
-				window.cancelAnimationFrame(controller.game);
-			}
+			console.log("STOP")
 			controller.gamePaused = true;
+
+			// window.cancelAnimationFrame(controller.game);
 
 		}
 	};
@@ -295,16 +297,11 @@ document.addEventListener("DOMContentLoaded", function(event) {
 				snake.userControl = snake.userControlPrevious;
 		}
 
-		if (e.keyCode === 13) {
+		if (e.keyCode === 32) {
 			controller.stop();
 		}
 
 	}, false);
-
-
-
-
-
 
 
 	var gameSizeButton = document.getElementById("game-size-btn");
@@ -326,18 +323,11 @@ document.addEventListener("DOMContentLoaded", function(event) {
 
 	var startButton = document.getElementById("start-btn");
 
-	startButton.addEventListener("click", function() {
+	startButton.addEventListener("mousedown", function() {
+		console.log("START-BTN")
 		controller.start();
-	}, false);
-
-
-
-
-
-	console.log(model.gameSize)
-
-
-
+		display.hideMsg("#start-pause-btn");
+	});
 
 
 
