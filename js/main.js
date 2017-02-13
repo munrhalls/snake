@@ -7,13 +7,22 @@ document.addEventListener("DOMContentLoaded", function(event) {
 			return msgElement;
 		},
 		hideMsg: function(element) {
-			var element = document.querySelector(element);
+			var element = document.getElementById(element);
 			element.style.display = "none";
 		},
-		pauseMsg: function(element) {
-			var element = document.getElementById(element);
-			element.style.innerHTML = "Pause";
-			element.style.display = "block";
+		pauseMsg: function() {
+
+			if (!controller.gameStarted) {
+				startButton.style.display = "block";
+				startButton.innerHTML = "Start <span class='start-pause-footnote'> Click or hit enter </span> "
+			}
+
+			else if (controller.gamePaused) {
+				startButton.style.display = "block";
+				startButton.innerHTML = "Paused <span class='start-pause-footnote'> Click or hit spacebar </span> "
+			} else {
+				startButton.style.display = "none";
+			}
 		},
 		displayScore: function(snakeLength) {
 			var scoreElement = document.getElementById("score");
@@ -90,9 +99,6 @@ document.addEventListener("DOMContentLoaded", function(event) {
 		},
 		updateSnake: function() {
 
-
-
-
 			var ignoreFood = snake.eat();
 
 			for (var i = 0; i < this.snakeLength; i++) {
@@ -121,7 +127,7 @@ document.addEventListener("DOMContentLoaded", function(event) {
 		foodSize: 7.5,
 		gridSize: 10,
 		squaresPerRow: 50,
-		squaresNum: "",
+		squaresNum: 0,
 		gameSize: "Normal",
 		gameSpeed: 10,
 		isGridSizeValid: function() {
@@ -147,22 +153,27 @@ document.addEventListener("DOMContentLoaded", function(event) {
 		},
 		createGrid: function() {
 			var grid = document.getElementById("grid");
-			this.calcGridSquares();
+			grid.innerHTML = "";
+			if (!model.squaresNum) {
+				this.calcGridSquares();
 
-			for (var i = 0; i <= this.squaresNum; i++) {
-				var cell = document.createElement("div");
-				cell.className = "cell";
-				cell.style.float = "left";
-				cell.style.border = "1px solid #000"
-				cell.style.width = (this.gridSize - 2) + "px";
-				cell.style.height = (this.gridSize - 2)+ "px";
-				grid.appendChild(cell);
+				for (var i = 0; i <= this.squaresNum; i++) {
+					var cell = document.createElement("div");
+					cell.className = "cell";
+					cell.style.float = "left";
+					cell.style.border = "1px solid #000"
+					cell.style.width = (this.gridSize - 2) + "px";
+					cell.style.height = (this.gridSize - 2)+ "px";
+					grid.appendChild(cell);
+				}
 			}
+
 		},
 		createBoard: function() {
 
 				var canvas = document.getElementById("canvas");
 				context = canvas.getContext("2d");
+				context.clearRect(0, 0, 500, 500);
 			},
 		foodLocation: ["", ""],
 		generateFoodLocation: function(squaresPerRow) {
@@ -220,6 +231,7 @@ document.addEventListener("DOMContentLoaded", function(event) {
 			if (model.gameSize === "Mini") {
 				model.gridSize = 10;
 				model.foodSize = 4;
+				model.gameSpeed = 5;
 				snake.snakeSize = 4;
 				snake.snakePositionX = 245;
 				snake.snakePositionY = 245;
@@ -227,14 +239,16 @@ document.addEventListener("DOMContentLoaded", function(event) {
 			} else if (model.gameSize === "Normal") {
 				model.gridSize = 20;
 				model.foodSize = 9;
-				model.gameSpeed = 10;
+				model.gameSpeed = 9;
 				snake.snakeSize = 9;
+				snake.snakePositionX = 250;
+				snake.snakePositionY = 250;
 				snake.snakePathSize = 20;
 			} else if (model.gameSize = "Gargantuan") {
 
 				model.gridSize = 50;
 				model.foodSize = 25;
-				model.gameSpeed = 15;
+				model.gameSpeed = 10;;
 				snake.snakeSize = 25;
 				snake.snakePositionX = 225;
 				snake.snakePositionY = 225;
@@ -243,52 +257,53 @@ document.addEventListener("DOMContentLoaded", function(event) {
 
 		},
 		prepareGame: function() {
-			controller.changeSize(model.gameSize);
+			snake.snakeLength = 1;
+			this.changeSize(model.gameSize);
+			model.squaresNum = 0;
 			model.createGrid();
 			model.createBoard();
 			model.generateFoodLocation(model.squaresPerRow);
 		},
 		runGame: function() {
 			model.frames++;
+			if (model.frames % model.gameSpeed === 0 && !controller.gameOver && !controller.gamePaused && controller.gameStarted) {
 
-			if (model.frames % model.gameSpeed === 0) {
-				if (!controller.gameOver && !controller.gamePaused) {
 					snake.clearSnake();
 					model.generateFood();
 					snake.updateSnake(snake.userControl);
 					display.displayScore(snake.snakeLength);
-				}
 			}
 
 			controller.game = window.requestAnimationFrame(controller.runGame);
-
-
 		},
 		start: function start() {
+			controller.gamePaused = false;
+
 			if (!controller.gameStarted) {
 				controller.gameStarted = true;
-				controller.gamePaused = false;
 				controller.prepareGame(model.gameSize);
 			}
-			display.hideMsg("#start-btn");
-			controller.gamePaused = false;
+			display.hideMsg("start-btn");
 
 			window.requestAnimationFrame(controller.runGame);
 
 		},
 		stop: function stop() {
-			var startButton = document.getElementById("start-btn");
-			startButton.innerHTML = "Paused";
-			startButton.style.display = "block";
+			var startButton = document.getElementsByClassName("start-btn");
+			display.pauseMsg();
 			controller.gamePaused = true;
 			window.cancelAnimationFrame(controller.game);
 		},
 		restart: function() {
+			startButton.style.display = "block"
+			var msg = display.displayMsg("");
+			msg.style.display = "none"
+			var canvas = document.getElementById("canvas");
+			canvas.style.backgroundColor = "";
 			controller.gameStarted = false;
-			this.start();
-
-
-
+			this.stop();
+			model.frames = 0;
+			this.prepareGame();
 		}
 	};
 
@@ -335,12 +350,22 @@ document.addEventListener("DOMContentLoaded", function(event) {
 		}
 
 
-	var startButton = document.getElementById("start-btn");
-	startButton.addEventListener("click", function() {
-		this.style.display = "none"
-		controller.start();
-	});
 
+
+		var startButton = document.getElementById("start-btn");
+
+		startButton.addEventListener("click", function() {
+			this.style.display = "none"
+			controller.start();
+		});
+
+
+
+	var restartButton = document.getElementById("restart-btn")
+
+	restartButton.addEventListener("click", function() {
+		controller.restart();
+	});
 
 
 });
