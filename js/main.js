@@ -194,6 +194,7 @@ document.addEventListener("DOMContentLoaded", function(event) {
 		game: "",
 		gameOver: false,
 		gamePaused: false,
+		gameStarted: false,
 		checkCollision: function(snakeBlocks, ignoreFood) {
 			var currentLocation = snakeBlocks[0];
 
@@ -202,7 +203,7 @@ document.addEventListener("DOMContentLoaded", function(event) {
 			for (var i = 1 + ignoreFood; i < snake.snakeLength; i++) {
 				if (currentLocation[0] === snakeBlocks[i][0] && currentLocation[1] === snakeBlocks[i][1]) {
 				controller.gameOver = true;
-				display.gameOverMsg("Your snake has hit itself! <br><br> It's all over!!!");
+				display.gameOverMsg("Your snake has hit itself! <br><br> It's all over!!! <br><br> Your score: " + snake.snakeLength);
 				}
 			}
 		},
@@ -264,19 +265,23 @@ document.addEventListener("DOMContentLoaded", function(event) {
 
 		},
 		start: function start() {
-			console.log("START")
-			// controller.gamePaused = false;
-			// controller.prepareGame("Normal");
-			// controller.runGame();
-			// window.requestAnimationFrame(controller.runGame);
+			if (!controller.gameStarted) {
+				controller.gameStarted = true;
+				controller.gamePaused = false;
+				controller.prepareGame(model.gameSize);
+			}
+			display.hideMsg("#start-btn");
+			controller.gamePaused = false;
+
+			window.requestAnimationFrame(controller.runGame);
 
 		},
 		stop: function stop() {
-			console.log("STOP")
+			var startButton = document.getElementById("start-btn");
+			startButton.innerHTML = "Paused";
+			startButton.style.display = "block";
 			controller.gamePaused = true;
-
-			// window.cancelAnimationFrame(controller.game);
-
+			window.cancelAnimationFrame(controller.game);
 		}
 	};
 
@@ -298,35 +303,32 @@ document.addEventListener("DOMContentLoaded", function(event) {
 		}
 
 		if (e.keyCode === 32) {
-			controller.stop();
+			var flow = [controller.start, controller.stop];
+			controller.gamePaused ^= true;
+			flow[controller.gamePaused]();
 		}
 
 	}, false);
 
 
-	var gameSizeButton = document.getElementById("game-size-btn");
-	var sizeOptions = document.getElementById("size-options-container");
+		var sizeButtons = document.getElementById("size-options-container");
+		for (var i = 0; i <= 2; i++) {
+				sizeButtons.children[i].addEventListener("click", activeGameSize);
+		};
 
-	gameSizeButton.addEventListener("click", function() {
-		sizeOptions.style.display = (sizeOptions.dataset.toggled ^= 1) ? "block" : "none";
-	}, false);
-
-
-	for (var i = 1; i <= 3; i++) {
-		var button = document.getElementById("size-option-" + i);
-
-		button.addEventListener("click", function() {
+		function activeGameSize() {
+			for (var i = 0; i <= 2; i++) {
+				sizeButtons.children[i].classList.remove("active");
+			}
 			model.gameSize = this.innerHTML;
-			console.log(model.gameSize)
-		});
-	};
+			this.classList.add("active");
+		}
+
 
 	var startButton = document.getElementById("start-btn");
-
-	startButton.addEventListener("mousedown", function() {
-		console.log("START-BTN")
+	startButton.addEventListener("click", function() {
+		this.style.display = "none"
 		controller.start();
-		display.hideMsg("#start-pause-btn");
 	});
 
 

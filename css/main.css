@@ -6,13 +6,6 @@ body {
 	background-color: #0a2500;
 }
 
-input,
-button {
-	display: block;
-width: 100px;
-height: 100px;
-}
-
 .container {
 	position: relative;
 	width: 950px;
@@ -25,7 +18,7 @@ height: 100px;
 		top: 75px;
 		left: calc(50% - 250px);
 		/*border: 1px solid #104201;*/
-		box-shadow: 0 0 10px 5px #104201;
+		box-shadow: 0 0 15px 5px #104201;
 		margin: 0 auto;
 		background-color: #034a0a;
 	}
@@ -82,7 +75,7 @@ height: 100px;
 		width: 140px;
 		height: 44px;
 		padding: 20px;
-		box-shadow: 0 0 10px 5px #104201;
+		box-shadow: 0 0 15px 10px #104201;
 		background-color: #000;
 		color: #22ce11;
 		font-size: 22px;
@@ -108,17 +101,13 @@ height: 100px;
 
 	}
 
-	#size-options-container {
-		display: none;
-	}
-
 		.size-buttons {
 			display: block;
 			position: absolute;
 			left: calc(50% + 340px);
 			width: 100px;
 			padding: 20px;
-			box-shadow: 0 0 15px 2.5px #fff;
+			box-shadow: 0 0 15px 5px #104201;
 			background-color: #000;
 			color: #fff;
 			font-size: 22px;
@@ -136,3 +125,11 @@ height: 100px;
 			top: 335px;
 		}
 
+
+
+
+/* ===================== Helper classes ===================== */
+
+.active {
+	box-shadow: 0 0 15px 5px #fff;
+}
