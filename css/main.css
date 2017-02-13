@@ -12,6 +12,13 @@ body {
 	margin: 0 auto;
 }
 
+/*	.title {
+		font-size: 60px;
+		color: #22ce11;
+		text-align: center;
+	}*/
+
+
 	#canvas {
 		display: block;
 		position: absolute;
@@ -80,6 +87,25 @@ body {
 		color: #22ce11;
 		font-size: 22px;
 	}
+
+	#restart-btn {
+		display: block;
+		position: absolute;
+		top: 252.5px;
+		left: calc(50% - 175px) ;
+		padding-bottom: 10px;
+		width: 350px;
+    box-shadow: 0 0 15px 2.5px #fff;
+		text-align: center;
+		color: #22ce11;
+		font-size: 60px;
+		letter-spacing: 6px;
+		background-color: #0a2500;
+		z-index: 100;
+
+	}
+
+
 
 	#game-size-label {
 		display: block;

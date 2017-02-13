@@ -282,6 +282,13 @@ document.addEventListener("DOMContentLoaded", function(event) {
 			startButton.style.display = "block";
 			controller.gamePaused = true;
 			window.cancelAnimationFrame(controller.game);
+		},
+		restart: function() {
+			controller.gameStarted = false;
+			this.start();
+
+
+
 		}
 	};
 
@@ -317,11 +324,14 @@ document.addEventListener("DOMContentLoaded", function(event) {
 		};
 
 		function activeGameSize() {
+			if (!controller.gameStarted) {
+
 			for (var i = 0; i <= 2; i++) {
 				sizeButtons.children[i].classList.remove("active");
 			}
-			model.gameSize = this.innerHTML;
-			this.classList.add("active");
+				model.gameSize = this.innerHTML;
+				this.classList.add("active");
+			}
 		}
 
 
