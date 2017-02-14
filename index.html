@@ -4,6 +4,7 @@
 	  <meta charset="UTF-8">
 		<meta http-equiv="X-UA-Compatible" content="IE=Edge">
     <title>Page title</title>
+    <link href="https://fonts.googleapis.com/css?family=Orbitron" rel="stylesheet">
     <link rel="stylesheet" href="css/reset.css">
     <link rel="stylesheet" href="css/main.css">
   </head>
@@ -11,25 +12,23 @@
   	<div id="container">
   		<h1 class="title"1>SNAKE</h1>
   		<h2 id="message"></h2>
-  		<div id="score">Score: 0 points</div>
 
-			<button id="start-btn" type="button">Start<span class="start-pause-footnote">Press or hit enter</span></button>
+  		<button id="start-btn" type="button">Start<span class="start-pause-footnote">Click or hit enter</span>
+			</button>
 
-
-			<button id="restart-btn" type="button">Restart</button>
-
-
-
-  		<div class="game-size-container">
-				<label id="game-size-label" for="game-size-btn">Game size <span class="game-size-footnote">(click to change)</span></label>
-  			<button id="game-size-btn" type="button"></button>
-
-				<div id="size-options-container">
-	  			<button class="size-buttons" id="size-option-1">Mini</button>
-	  			<button class="size-buttons active" id="size-option-2">Normal</button>
-	  			<button class="size-buttons" id="size-option-3">Gargantuan</button>
-  			</div>
+  		<div class="game-info-container">
+				<div id="score"><p>Score: 0 points</p></div>
+				<button id="restart-btn" type="button">Restart</button>
   		</div>
+
+			<div id="size-options-container">
+				<label id="game-size-label" for="game-size-btn">Game size <span class="game-size-footnote">(click to change)</span></label>
+				<button id="game-size-btn" type="button"></button>
+  			<button class="size-buttons" id="size-option-1">Mini</button>
+  			<button class="size-buttons active" id="size-option-2">Normal</button>
+  			<button class="size-buttons" id="size-option-3">Gargantuan</button>
+			</div>
+
 
   		<div id="grid">
   		</div>

@@ -162,8 +162,8 @@ document.addEventListener("DOMContentLoaded", function(event) {
 					cell.className = "cell";
 					cell.style.float = "left";
 					cell.style.border = "1px solid #000"
-					cell.style.width = (this.gridSize - 2) + "px";
-					cell.style.height = (this.gridSize - 2)+ "px";
+					cell.style.width = (this.gridSize) + "px";
+					cell.style.height = (this.gridSize)+ "px";
 					grid.appendChild(cell);
 				}
 			}
@@ -289,9 +289,13 @@ document.addEventListener("DOMContentLoaded", function(event) {
 
 		},
 		stop: function stop() {
+			if (controller.gameStarted) {
+				controller.gamePaused = true;
+			}
+
 			var startButton = document.getElementsByClassName("start-btn");
 			display.pauseMsg();
-			controller.gamePaused = true;
+
 			window.cancelAnimationFrame(controller.game);
 		},
 		restart: function() {
@@ -333,16 +337,16 @@ document.addEventListener("DOMContentLoaded", function(event) {
 	}, false);
 
 
-		var sizeButtons = document.getElementById("size-options-container");
+		var sizeButtons = document.getElementsByClassName("size-buttons");
 		for (var i = 0; i <= 2; i++) {
-				sizeButtons.children[i].addEventListener("click", activeGameSize);
+				sizeButtons[i].addEventListener("click", activeGameSize);
 		};
 
 		function activeGameSize() {
 			if (!controller.gameStarted) {
 
 			for (var i = 0; i <= 2; i++) {
-				sizeButtons.children[i].classList.remove("active");
+				sizeButtons[i].classList.remove("active");
 			}
 				model.gameSize = this.innerHTML;
 				this.classList.add("active");
