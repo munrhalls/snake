@@ -206,6 +206,7 @@ document.addEventListener("DOMContentLoaded", function(event) {
 		gameOver: false,
 		gamePaused: false,
 		gameStarted: false,
+		gameDifficulty: 0,
 		checkCollision: function(snakeBlocks, ignoreFood) {
 			var currentLocation = snakeBlocks[0];
 
@@ -231,7 +232,7 @@ document.addEventListener("DOMContentLoaded", function(event) {
 			if (model.gameSize === "Mini") {
 				model.gridSize = 10;
 				model.foodSize = 4;
-				model.gameSpeed = 5;
+				model.gameSpeed = 5 - controller.gameDifficulty;
 				snake.snakeSize = 4;
 				snake.snakePositionX = 245;
 				snake.snakePositionY = 245;
@@ -239,16 +240,15 @@ document.addEventListener("DOMContentLoaded", function(event) {
 			} else if (model.gameSize === "Normal") {
 				model.gridSize = 20;
 				model.foodSize = 9;
-				model.gameSpeed = 9;
+				model.gameSpeed = 9 - controller.gameDifficulty;
 				snake.snakeSize = 9;
 				snake.snakePositionX = 250;
 				snake.snakePositionY = 250;
 				snake.snakePathSize = 20;
 			} else if (model.gameSize = "Gargantuan") {
-
 				model.gridSize = 50;
 				model.foodSize = 25;
-				model.gameSpeed = 10;;
+				model.gameSpeed = 10 - controller.gameDifficulty;
 				snake.snakeSize = 25;
 				snake.snakePositionX = 225;
 				snake.snakePositionY = 225;
@@ -259,6 +259,7 @@ document.addEventListener("DOMContentLoaded", function(event) {
 		prepareGame: function() {
 			snake.snakeLength = 1;
 			this.changeSize(model.gameSize);
+			this.gameOver = false;
 			model.squaresNum = 0;
 			model.createGrid();
 			model.createBoard();
@@ -266,6 +267,7 @@ document.addEventListener("DOMContentLoaded", function(event) {
 		},
 		runGame: function() {
 			model.frames++;
+			console.log(model.gameSpeed)
 			if (model.frames % model.gameSpeed === 0 && !controller.gameOver && !controller.gamePaused && controller.gameStarted) {
 
 					snake.clearSnake();
@@ -277,6 +279,7 @@ document.addEventListener("DOMContentLoaded", function(event) {
 			controller.game = window.requestAnimationFrame(controller.runGame);
 		},
 		start: function start() {
+			console.log(model.gameSpeed)
 			controller.gamePaused = false;
 
 			if (!controller.gameStarted) {
@@ -328,6 +331,10 @@ document.addEventListener("DOMContentLoaded", function(event) {
 				snake.userControl = snake.userControlPrevious;
 		}
 
+		if (e.keyCode === 13 && !controller.gameStarted) {
+			controller.start();
+		}
+
 		if (e.keyCode === 32) {
 			var flow = [controller.start, controller.stop];
 			controller.gamePaused ^= true;
@@ -364,12 +371,47 @@ document.addEventListener("DOMContentLoaded", function(event) {
 		});
 
 
+		var restartButton = document.getElementById("restart-btn")
 
-	var restartButton = document.getElementById("restart-btn")
+		restartButton.addEventListener("click", function() {
+			controller.restart();
+		});
 
-	restartButton.addEventListener("click", function() {
-		controller.restart();
-	});
+
+		var difficultyButton = document.getElementById("toggle-difficulty-options");
+		var difficultyContainer = document.getElementsByClassName("difficulty-options-container")[0];
+		difficultyButton.addEventListener("click", function() {
+
+			difficultyContainer.style.display = (difficultyContainer.dataset.toggled ^= 1) ? "block" : "none";
+		}, false);
+
+
+
+			for (var i = 0; i < difficultyContainer.children.length; i++) {
+
+				difficultyContainer.children[i].addEventListener("click", function(){
+					controller.gameDifficulty = this.value;
+				});
+			}
+
+		var difficultyButtons = document.getElementsByClassName("difficulty-buttons");
+		for (var i = 0; i <= 4; i++) {
+				difficultyButtons[i].addEventListener("click", activeGameDifficulty);
+		};
+
+		function activeGameDifficulty() {
+			if (!controller.gameStarted) {
+
+			for (var i = 0; i <= 4; i++) {
+				difficultyButtons[i].classList.remove("active");
+			}
+				controller.gameDifficulty = parseInt(this.value);
+
+				console.log(this.value);
+				this.classList.add("active");
+			}
+		}
+
 
 
 });

@@ -22,8 +22,20 @@
   		</div>
 
 			<div id="size-options-container">
-				<label id="game-size-label" for="game-size-btn">Game size <span class="game-size-footnote">(click to change)</span></label>
-				<button id="game-size-btn" type="button"></button>
+			<h2 id="game-size-label">Difficulty options <span class="game-size-footnote">(click to toggle menu)</span></h2>
+
+				<button id="toggle-difficulty-options" id="difficulty-option-1">Choose difficulty</button>
+				<div class="difficulty-options-container">
+					<button class="difficulty-buttons" id="difficulty-option-1" value="-5">Easy</button>
+					<button class="difficulty-buttons" id="difficulty-option-2" value="0">Normal</button>
+					<button class="difficulty-buttons" id="difficulty-option-3" value="10">Hard
+					</button>
+					<button class="difficulty-buttons" id="difficulty-option-4" value="20">Insane</button>
+					<button class="difficulty-buttons" id="difficulty-option-5" value="30">Absurd</button>
+				</div>
+
+				<h2 id="game-size-label">Size options <span class="game-size-footnote">(click to change)</span></h2>
+
   			<button class="size-buttons" id="size-option-1">Mini</button>
   			<button class="size-buttons active" id="size-option-2">Normal</button>
   			<button class="size-buttons" id="size-option-3">Gargantuan</button>

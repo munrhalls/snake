@@ -121,15 +121,12 @@ body {
 		left: calc(50% + 280px);
 		width: 250px;
 		height: 500px;
-		padding: 20px;
 		box-shadow: 0 0 10px 5px #104201;
 		background-color: #000;
 		color: #22ce11;
 		text-align: center;
 		font-size: 16px;
 	}
-
-
 
 		#game-size-label {
 			display: block;
@@ -151,9 +148,20 @@ body {
 			font-size: 13px;
 		}
 
+		#game-difficulty-label {
+			display: block;
+			margin: 20px auto 0px;
+			padding: 5px;
+			width: 160px;
+			height: 45px;
 
+			border-radius: 10px;
+			background-color: #000;
+			color: #22ce11;
+			font-size: 16px;
+		}
 
-		.size-buttons {
+		#toggle-difficulty-options {
 			margin: 20px auto 5px;
 			padding: 5px;
 			width: 160px;
@@ -161,20 +169,42 @@ body {
 			box-shadow: 0 0 15px 10px #104201;
 			border-radius: 10px;
 			background-color: #000;
-			color: #fff;
+			color: #22ce11;
 			font-size: 16px;
 		}
 
-
-		#size-option-1 {
-
+		.difficulty-options-container {
+			position: absolute;
+			background-color: #000;
+			display: none;
 		}
+			.difficulty-buttons {
+				margin: 20px auto 5px;
+				padding: 5px;
+				width: 160px;
+				height: 45px;
+				box-shadow: 0 0 15px 10px #104201;
+				border-radius: 10px;
+				background-color: #000;
+				color: #fff;
+				font-size: 16px;
+			}
 
-		#size-option-2 {
 
-		}
 
-		#size-option-3 {
+
+
+
+			.size-buttons {
+				margin: 20px auto 5px;
+				padding: 5px;
+				width: 160px;
+				height: 45px;
+				box-shadow: 0 0 15px 10px #104201;
+				border-radius: 10px;
+				background-color: #000;
+				color: #fff;
+				font-size: 16px;
 			}
 
 
