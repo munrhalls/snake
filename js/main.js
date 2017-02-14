@@ -52,6 +52,7 @@ document.addEventListener("DOMContentLoaded", function(event) {
 		  context.beginPath();
 		  context.fillStyle = this.snakeColor;
 		 	context.arc(x, y, this.snakeSize, 0,2*Math.PI, false);
+		 	context.closePath();
 		 	context.fill();
  			},
 		snakeLife: function() {
@@ -232,7 +233,7 @@ document.addEventListener("DOMContentLoaded", function(event) {
 			if (model.gameSize === "Mini") {
 				model.gridSize = 10;
 				model.foodSize = 4;
-				model.gameSpeed = 2 - controller.gameDifficulty;
+				model.gameSpeed = 5 - controller.gameDifficulty;
 				snake.snakeSize = 4;
 				snake.snakePositionX = 245;
 				snake.snakePositionY = 245;
@@ -240,7 +241,7 @@ document.addEventListener("DOMContentLoaded", function(event) {
 			} else if (model.gameSize === "Normal") {
 				model.gridSize = 20;
 				model.foodSize = 9;
-				model.gameSpeed = 5 - controller.gameDifficulty;
+				model.gameSpeed = 7 - controller.gameDifficulty;
 				snake.snakeSize = 9;
 				snake.snakePositionX = 250;
 				snake.snakePositionY = 250;
@@ -248,7 +249,7 @@ document.addEventListener("DOMContentLoaded", function(event) {
 			} else if (model.gameSize = "Gargantuan") {
 				model.gridSize = 50;
 				model.foodSize = 25;
-				model.gameSpeed = 5 - controller.gameDifficulty;
+				model.gameSpeed = 9 - controller.gameDifficulty;
 				snake.snakeSize = 25;
 				snake.snakePositionX = 225;
 				snake.snakePositionY = 225;
@@ -267,7 +268,6 @@ document.addEventListener("DOMContentLoaded", function(event) {
 		},
 		runGame: function() {
 			model.frames++;
-			console.log(model.gameSpeed)
 			if (model.frames % model.gameSpeed === 0) {
 				if (!controller.gameOver && !controller.gamePaused && controller.gameStarted) {
 					snake.clearSnake();
@@ -277,11 +277,9 @@ document.addEventListener("DOMContentLoaded", function(event) {
 				}
 			}
 
-
 			controller.game = window.requestAnimationFrame(controller.runGame);
 		},
 		start: function start() {
-			console.log(model.gameSpeed)
 			controller.gamePaused = false;
 
 			if (!controller.gameStarted) {
@@ -290,7 +288,7 @@ document.addEventListener("DOMContentLoaded", function(event) {
 			}
 			display.hideMsg("start-btn");
 
-			window.requestAnimationFrame(controller.runGame);
+			controller.runGame();
 
 		},
 		stop: function stop() {
@@ -408,8 +406,6 @@ document.addEventListener("DOMContentLoaded", function(event) {
 				difficultyButtons[i].classList.remove("active");
 			}
 				// controller.gameDifficulty = parseInt(this.value);
-
-				console.log(this.value);
 				this.classList.add("active");
 			}
 		}
