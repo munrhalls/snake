@@ -232,7 +232,7 @@ document.addEventListener("DOMContentLoaded", function(event) {
 			if (model.gameSize === "Mini") {
 				model.gridSize = 10;
 				model.foodSize = 4;
-				model.gameSpeed = 5 - controller.gameDifficulty;
+				model.gameSpeed = 2 - controller.gameDifficulty;
 				snake.snakeSize = 4;
 				snake.snakePositionX = 245;
 				snake.snakePositionY = 245;
@@ -240,7 +240,7 @@ document.addEventListener("DOMContentLoaded", function(event) {
 			} else if (model.gameSize === "Normal") {
 				model.gridSize = 20;
 				model.foodSize = 9;
-				model.gameSpeed = 9 - controller.gameDifficulty;
+				model.gameSpeed = 5 - controller.gameDifficulty;
 				snake.snakeSize = 9;
 				snake.snakePositionX = 250;
 				snake.snakePositionY = 250;
@@ -248,7 +248,7 @@ document.addEventListener("DOMContentLoaded", function(event) {
 			} else if (model.gameSize = "Gargantuan") {
 				model.gridSize = 50;
 				model.foodSize = 25;
-				model.gameSpeed = 10 - controller.gameDifficulty;
+				model.gameSpeed = 5 - controller.gameDifficulty;
 				snake.snakeSize = 25;
 				snake.snakePositionX = 225;
 				snake.snakePositionY = 225;
@@ -268,13 +268,15 @@ document.addEventListener("DOMContentLoaded", function(event) {
 		runGame: function() {
 			model.frames++;
 			console.log(model.gameSpeed)
-			if (model.frames % model.gameSpeed === 0 && !controller.gameOver && !controller.gamePaused && controller.gameStarted) {
-
+			if (model.frames % model.gameSpeed === 0) {
+				if (!controller.gameOver && !controller.gamePaused && controller.gameStarted) {
 					snake.clearSnake();
 					model.generateFood();
 					snake.updateSnake(snake.userControl);
 					display.displayScore(snake.snakeLength);
+				}
 			}
+
 
 			controller.game = window.requestAnimationFrame(controller.runGame);
 		},
@@ -405,7 +407,7 @@ document.addEventListener("DOMContentLoaded", function(event) {
 			for (var i = 0; i <= 4; i++) {
 				difficultyButtons[i].classList.remove("active");
 			}
-				controller.gameDifficulty = parseInt(this.value);
+				// controller.gameDifficulty = parseInt(this.value);
 
 				console.log(this.value);
 				this.classList.add("active");
