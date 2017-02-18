@@ -32,6 +32,7 @@ document.addEventListener("DOMContentLoaded", function(event) {
 			var msgElement = this.displayMsg(msg);
 			msgElement.style.fontSize = "60px";
 			msgElement.style.top = "100px";
+			msgElement.style.display = "block";
 			var canvas = document.getElementById("canvas");
 			(canvas).style.backgroundColor = "black";
 		}
@@ -130,7 +131,7 @@ document.addEventListener("DOMContentLoaded", function(event) {
 		squaresPerRow: 50,
 		squaresNum: 0,
 		gameSize: "Normal",
-		gameSpeed: 10,
+		gameSpeed: -5,
 		isGridSizeValid: function() {
 
 			if (250000 % this.gridSize === 0) {
@@ -233,7 +234,7 @@ document.addEventListener("DOMContentLoaded", function(event) {
 			if (model.gameSize === "Mini") {
 				model.gridSize = 10;
 				model.foodSize = 4;
-				model.gameSpeed = 5 - controller.gameDifficulty;
+				model.gameSpeed = 7 - controller.gameDifficulty;
 				snake.snakeSize = 4;
 				snake.snakePositionX = 245;
 				snake.snakePositionY = 245;
@@ -241,7 +242,7 @@ document.addEventListener("DOMContentLoaded", function(event) {
 			} else if (model.gameSize === "Normal") {
 				model.gridSize = 20;
 				model.foodSize = 9;
-				model.gameSpeed = 7 - controller.gameDifficulty;
+				model.gameSpeed = 10 - controller.gameDifficulty;
 				snake.snakeSize = 9;
 				snake.snakePositionX = 250;
 				snake.snakePositionY = 250;
@@ -249,13 +250,14 @@ document.addEventListener("DOMContentLoaded", function(event) {
 			} else if (model.gameSize = "Gargantuan") {
 				model.gridSize = 50;
 				model.foodSize = 25;
-				model.gameSpeed = 9 - controller.gameDifficulty;
+				model.gameSpeed = 15 - controller.gameDifficulty;
 				snake.snakeSize = 25;
 				snake.snakePositionX = 225;
 				snake.snakePositionY = 225;
 				snake.snakePathSize = 50;
 			}
-
+			console.log(controller.gameDifficulty)
+			console.log(model.gameSpeed);
 		},
 		prepareGame: function() {
 			snake.snakeLength = 1;
@@ -405,12 +407,13 @@ document.addEventListener("DOMContentLoaded", function(event) {
 			for (var i = 0; i <= 4; i++) {
 				difficultyButtons[i].classList.remove("active");
 			}
-				// controller.gameDifficulty = parseInt(this.value);
+				controller.gameDifficulty = parseInt(this.value);
+				console.log(controller.gameDifficulty)
 				this.classList.add("active");
 			}
 		}
 
-
+console.log
 
 });
 
