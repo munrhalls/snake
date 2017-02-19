@@ -11,12 +11,12 @@ document.addEventListener("DOMContentLoaded", function(event) {
 			element.style.display = "none";
 		},
 		pauseMsg: function() {
-
+			console.log("Pause function")
+			console.log(!controller.gameStarted)
 			if (!controller.gameStarted) {
 				startButton.style.display = "block";
 				startButton.innerHTML = "Start <span class='start-pause-footnote'> Click or hit enter </span> "
 			}
-
 			else if (controller.gamePaused) {
 				startButton.style.display = "block";
 				startButton.innerHTML = "Paused <span class='start-pause-footnote'> Click or hit spacebar </span> "
@@ -216,8 +216,10 @@ document.addEventListener("DOMContentLoaded", function(event) {
 
 			for (var i = 1 + ignoreFood; i < snake.snakeLength; i++) {
 				if (currentLocation[0] === snakeBlocks[i][0] && currentLocation[1] === snakeBlocks[i][1]) {
+				restartButton.style.boxShadow = "0 0 30px 20px green";
+				restartButton.style.fontWeight = "bold";
 				controller.gameOver = true;
-				display.gameOverMsg("Your snake has hit itself! <br><br> It's all over!!! <br><br> Your score: " + snake.snakeLength);
+				display.gameOverMsg("Your snake has hit itself! <br><br> Game over. <br><br> Your score: " + snake.snakeLength);
 				}
 			}
 		},
@@ -226,6 +228,8 @@ document.addEventListener("DOMContentLoaded", function(event) {
 				|| currentLocation[0] > 490 || currentLocation[1] > 490) {
 				controller.gameOver = true;
 				display.gameOverMsg("Your snake has hit a wall!!! <br><br> Game over. <br><br> Your score: " + snake.snakeLength);
+				restartButton.style.boxShadow = "0 0 30px 20px green";
+				restartButton.style.fontWeight = "bold";
 			}
 		},
 		changeSize: function(size) {
@@ -270,6 +274,7 @@ document.addEventListener("DOMContentLoaded", function(event) {
 			model.frames++;
 			if (model.frames % model.gameSpeed === 0) {
 				if (!controller.gameOver && !controller.gamePaused && controller.gameStarted) {
+					console.log("Run")
 					snake.clearSnake();
 					model.generateFood();
 					snake.updateSnake(snake.userControl);
@@ -280,16 +285,16 @@ document.addEventListener("DOMContentLoaded", function(event) {
 			controller.game = window.requestAnimationFrame(controller.runGame);
 		},
 		start: function start() {
-			console.log("START")
 
 			if (!controller.gameStarted) {
 				controller.gamePaused = false;
 				controller.gameOver = false;
-				console.log("START AFTER CONDITIONAL - !gameStarted")
 				controller.gameStarted = true;
 				controller.prepareGame(model.gameSize);
 			}
 			display.hideMsg("start-btn");
+			restartButton.style = "box-shadow: 0 0 15px 10px #104201";
+			restartButton.style.fontWeight = "normal";
 
 			controller.runGame();
 
@@ -301,20 +306,20 @@ document.addEventListener("DOMContentLoaded", function(event) {
 
 			var startButton = document.getElementsByClassName("start-btn");
 			display.pauseMsg();
-
 			window.cancelAnimationFrame(controller.game);
-			console.log("STOP")
+			console.log("Stop")
 		},
 		restart: function() {
+			snake.userControl = 39;
 			startButton.style.display = "block"
 			var msg = display.displayMsg("");
 			msg.style.display = "none"
 			var canvas = document.getElementById("canvas");
 			canvas.style.backgroundColor = "";
 			controller.gameStarted = false;
+			controller.gameOver = false;
 			this.stop();
 			model.frames = 0;
-			console.log("RESTART")
 		}
 	};
 
@@ -326,8 +331,6 @@ document.addEventListener("DOMContentLoaded", function(event) {
 				 || e.keyCode === 39 || e.keyCode === 40) {
 				snake.userControl = e.keyCode;
 			}
-		} else {
-			snake.userControl = null;
 		}
 
 		if (e.keyCode - snake.userControlPrevious === 2
@@ -335,12 +338,20 @@ document.addEventListener("DOMContentLoaded", function(event) {
 				snake.userControl = snake.userControlPrevious;
 		}
 
-
 		if (e.keyCode === 32) {
+			console.log("Spacebar event")
+			e.preventDefault();
 			var flow = [controller.start, controller.stop];
 			controller.gamePaused ^= true;
 			flow[controller.gamePaused]();
 		}
+
+		if (e.keyCode === 13 && !controller.gameStarted) {
+				e.preventDefault();
+				startButton.style.display = "none"
+				controller.start();
+				console.log("Start from enter")
+			}
 
 	}, false);
 
@@ -361,30 +372,18 @@ document.addEventListener("DOMContentLoaded", function(event) {
 			}
 		}
 
-
-
-
 		var startButton = document.getElementById("start-btn");
 
 		startButton.addEventListener("click", function() {
 			this.style.display = "none"
 			controller.start();
-		});
-
-		document.addEventListener("keydown", function(e) {
-
-			if (e.keyCode === 13 && !controller.gameStarted) {
-				e.preventDefault();
-				startButton.style.display = "none"
-				controller.start();
-			}
+			console.log("Start from click")
 		});
 
 
 		var restartButton = document.getElementById("restart-btn")
 
 		restartButton.addEventListener("click", function(e) {
-				e.preventDefault();
 				controller.restart();
 		});
 
@@ -423,9 +422,6 @@ document.addEventListener("DOMContentLoaded", function(event) {
 				this.classList.add("active");
 			}
 		}
-
-
-
 
 });
 
