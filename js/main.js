@@ -57,7 +57,7 @@ document.addEventListener("DOMContentLoaded", function(event) {
 		 	context.fill();
  			},
 		snakeLife: function() {
-			if (controller.gameOver) {
+			if (!controller.gameStarted) {
 				this.snakeSize = 70;
 				this.snakeColor = "red"
 			}
@@ -205,10 +205,10 @@ document.addEventListener("DOMContentLoaded", function(event) {
 
 	var controller = {
 		game: "",
-		gameOver: false,
 		gamePaused: false,
 		gameStarted: false,
 		gameDifficulty: 0,
+		gameOver: false,
 		checkCollision: function(snakeBlocks, ignoreFood) {
 			var currentLocation = snakeBlocks[0];
 
@@ -216,9 +216,10 @@ document.addEventListener("DOMContentLoaded", function(event) {
 
 			for (var i = 1 + ignoreFood; i < snake.snakeLength; i++) {
 				if (currentLocation[0] === snakeBlocks[i][0] && currentLocation[1] === snakeBlocks[i][1]) {
+				controller.gameStarted = false;
+					controller.gameOver = true;
 				restartButton.style.boxShadow = "0 0 30px 20px green";
 				restartButton.style.fontWeight = "bold";
-				controller.gameOver = true;
 				display.gameOverMsg("Your snake has hit itself! <br><br> Game over. <br><br> Your score: " + snake.snakeLength);
 				}
 			}
@@ -226,7 +227,8 @@ document.addEventListener("DOMContentLoaded", function(event) {
 		checkWalls: function(currentLocation) {
 			if (currentLocation[0]  <= 0 || currentLocation[1]  <= 0
 				|| currentLocation[0] > 490 || currentLocation[1] > 490) {
-				controller.gameOver = true;
+					controller.gameStarted = false;
+					controller.gameOver = true;
 				display.gameOverMsg("Your snake has hit a wall!!! <br><br> Game over. <br><br> Your score: " + snake.snakeLength);
 				restartButton.style.boxShadow = "0 0 30px 20px green";
 				restartButton.style.fontWeight = "bold";
@@ -273,7 +275,7 @@ document.addEventListener("DOMContentLoaded", function(event) {
 		runGame: function() {
 			model.frames++;
 			if (model.frames % model.gameSpeed === 0) {
-				if (!controller.gameOver && !controller.gamePaused && controller.gameStarted) {
+				if (!controller.gamePaused && controller.gameStarted) {
 					console.log("Run")
 					snake.clearSnake();
 					model.generateFood();
@@ -281,17 +283,17 @@ document.addEventListener("DOMContentLoaded", function(event) {
 					display.displayScore(snake.snakeLength);
 				}
 			}
-
+			console.log("running")
 			controller.game = window.requestAnimationFrame(controller.runGame);
 		},
 		start: function start() {
 
 			if (!controller.gameStarted) {
-				controller.gamePaused = false;
-				controller.gameOver = false;
+				console.log("START")
 				controller.gameStarted = true;
 				controller.prepareGame(model.gameSize);
 			}
+			controller.gamePaused = false;
 			display.hideMsg("start-btn");
 			restartButton.style = "box-shadow: 0 0 15px 10px #104201";
 			restartButton.style.fontWeight = "normal";
@@ -310,15 +312,19 @@ document.addEventListener("DOMContentLoaded", function(event) {
 			console.log("Stop")
 		},
 		restart: function() {
+			if (controller.gameStarted = true) {
+				window.cancelAnimationFrame(controller.game);
+				controller.gameStarted = false;
+			}
+			controller.gameOver = false;
+			startButton.style.display = "block";
+				startButton.innerHTML = "Start <span class='start-pause-footnote'> Click or hit enter </span> "
 			snake.userControl = 39;
-			startButton.style.display = "block"
+
 			var msg = display.displayMsg("");
 			msg.style.display = "none"
 			var canvas = document.getElementById("canvas");
 			canvas.style.backgroundColor = "";
-			controller.gameStarted = false;
-			controller.gameOver = false;
-			this.stop();
 			model.frames = 0;
 		}
 	};
@@ -326,7 +332,7 @@ document.addEventListener("DOMContentLoaded", function(event) {
 
 
 	document.addEventListener("keydown", function(e){
-		if (!controller.gameOver) {
+		if (controller.gameStarted) {
 			if (e.keyCode === 37 || e.keyCode === 38
 				 || e.keyCode === 39 || e.keyCode === 40) {
 				snake.userControl = e.keyCode;
@@ -338,7 +344,7 @@ document.addEventListener("DOMContentLoaded", function(event) {
 				snake.userControl = snake.userControlPrevious;
 		}
 
-		if (e.keyCode === 32) {
+		if (e.keyCode === 32 && controller.gameStarted) {
 			console.log("Spacebar event")
 			e.preventDefault();
 			var flow = [controller.start, controller.stop];
@@ -346,11 +352,13 @@ document.addEventListener("DOMContentLoaded", function(event) {
 			flow[controller.gamePaused]();
 		}
 
-		if (e.keyCode === 13 && !controller.gameStarted) {
+		if (e.keyCode === 13) {
 				e.preventDefault();
-				startButton.style.display = "none"
-				controller.start();
-				console.log("Start from enter")
+				if (!controller.gameStarted && !controller.gameOver) {
+					startButton.style.display = "none"
+					controller.start();
+
+				}
 			}
 
 	}, false);
@@ -374,7 +382,8 @@ document.addEventListener("DOMContentLoaded", function(event) {
 
 		var startButton = document.getElementById("start-btn");
 
-		startButton.addEventListener("click", function() {
+		startButton.addEventListener("click", function(e) {
+			e.preventDefault();
 			this.style.display = "none"
 			controller.start();
 			console.log("Start from click")
@@ -387,14 +396,12 @@ document.addEventListener("DOMContentLoaded", function(event) {
 				controller.restart();
 		});
 
-
 		var difficultyButton = document.getElementById("toggle-difficulty-options");
 		var difficultyContainer = document.getElementsByClassName("difficulty-options-container")[0];
 		difficultyButton.addEventListener("click", function() {
 
 			difficultyContainer.style.display = (difficultyContainer.dataset.toggled ^= 1) ? "block" : "none";
 		}, false);
-
 
 
 			for (var i = 0; i < difficultyContainer.children.length; i++) {
