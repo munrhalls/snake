@@ -12,14 +12,14 @@ document.addEventListener("DOMContentLoaded", function(event) {
 		},
 		pauseMsg: function() {
 			if (!controller.gameStarted) {
-				userInterface.startButton.style.display = "block";
-				userInterface.startButton.innerHTML = "Start <span class='start-pause-footnote'> Click or hit enter </span> "
+				gameInterface.startButton.style.display = "block";
+				gameInterface.startButton.innerHTML = "Start <span class='start-pause-footnote'> Click or hit enter </span> "
 			}
 			else if (controller.gamePaused) {
-				userInterface.startButton.style.display = "block";
-				userInterface.startButton.innerHTML = "Paused <span class='start-pause-footnote'> Click or hit spacebar </span> "
+				gameInterface.startButton.style.display = "block";
+				gameInterface.startButton.innerHTML = "Paused <span class='start-pause-footnote'> Click or hit spacebar </span> "
 			} else {
-				userInterface.startButton.style.display = "none";
+				gameInterface.startButton.style.display = "none";
 			}
 		},
 		displayScore: function(snakeLength) {
@@ -211,8 +211,8 @@ document.addEventListener("DOMContentLoaded", function(event) {
 				if (currentLocation[0] === snakeBlocks[i][0] && currentLocation[1] === snakeBlocks[i][1]) {
 				controller.gameStarted = false;
 					controller.gameOver = true;
-				restartButton.style.boxShadow = "0 0 30px 20px green";
-				restartButton.style.fontWeight = "bold";
+				gameInterface.restartButton.style.boxShadow = "0 0 30px 20px green";
+				gameInterface.restartButton.style.fontWeight = "bold";
 				display.gameOverMsg("Your snake has hit itself! <br><br> Game over. <br><br> Your score: " + snake.snakeLength);
 				}
 			}
@@ -223,8 +223,8 @@ document.addEventListener("DOMContentLoaded", function(event) {
 					controller.gameStarted = false;
 					controller.gameOver = true;
 				display.gameOverMsg("Your snake has hit a wall!!! <br><br> Game over. <br><br> Your score: " + snake.snakeLength);
-				restartButton.style.boxShadow = "0 0 30px 20px green";
-				restartButton.style.fontWeight = "bold";
+				gameInterface.restartButton.style.boxShadow = "0 0 30px 20px green";
+				gameInterface.restartButton.style.fontWeight = "bold";
 			}
 		},
 		changeSize: function(size) {
@@ -284,8 +284,8 @@ document.addEventListener("DOMContentLoaded", function(event) {
 			}
 			controller.gamePaused = false;
 			display.hideMsg("start-btn");
-			restartButton.style = "box-shadow: 0 0 15px 10px #104201";
-			restartButton.style.fontWeight = "normal";
+			gameInterface.restartButton.style = "box-shadow: 0 0 15px 10px #104201";
+			gameInterface.restartButton.style.fontWeight = "normal";
 			controller.runGame();
 
 		},
@@ -303,8 +303,8 @@ document.addEventListener("DOMContentLoaded", function(event) {
 				controller.gameStarted = false;
 			}
 			controller.gameOver = false;
-			userInterface.startButton.style.display = "block";
-			userInterface.startButton.innerHTML = "Start <span class='start-pause-footnote'> Click or hit enter </span> "
+			gameInterface.startButton.style.display = "block";
+			gameInterface.startButton.innerHTML = "Start <span class='start-pause-footnote'> Click or hit enter </span> "
 			snake.userControl = 39;
 
 			var msg = display.displayMsg("");
@@ -339,7 +339,7 @@ document.addEventListener("DOMContentLoaded", function(event) {
 		if (e.keyCode === 13) {
 				e.preventDefault();
 				if (!controller.gameStarted && !controller.gameOver) {
-					userInterface.startButton.style.display = "none"
+					gameInterface.startButton.style.display = "none"
 					controller.start();
 				}
 			}
@@ -347,18 +347,18 @@ document.addEventListener("DOMContentLoaded", function(event) {
 	}, false);
 
 
-	var userInterface =  {
+	var gameInterface =  {
 		sizeButtons: document.getElementsByClassName("size-buttons"),
 		sizeButtonsListen: function() {
 			for (var i = 0; i <= 2; i++) {
-				this.sizeButtons[i].addEventListener("click", userInterface.activeGameSize);
+				this.sizeButtons[i].addEventListener("click", gameInterface.activeGameSize);
 			};
 		},
 		activeGameSize: function() {
 			if (!controller.gameStarted) {
 
 			for (var i = 0; i <= 2; i++) {
-				userInterface.sizeButtons[i].classList.remove("active");
+				gameInterface.sizeButtons[i].classList.remove("active");
 			}
 				model.gameSize = this.innerHTML;
 				this.classList.add("active");
@@ -372,49 +372,39 @@ document.addEventListener("DOMContentLoaded", function(event) {
 				controller.start();
 			});
 		},
-
-
-	}
-
-	userInterface.sizeButtonsListen();
-	userInterface.startButtonListen();
-
-
-
-
-
-
-		var restartButton = document.getElementById("restart-btn")
-
-		restartButton.addEventListener("click", function(e) {
+		restartButton: document.getElementById("restart-btn"),
+		restartButtonListen: function() {
+			this.restartButton.addEventListener("click", function(e) {
 				controller.restart();
-		});
+			});
+		},
+		difficultyButton: document.getElementById("toggle-difficulty-options"),
+		difficultyContainer: document.getElementsByClassName("difficulty-options-container")[0],
+		difficultyButtons: document.getElementsByClassName("difficulty-buttons"),
+		difficultyButtonsListen: function() {
+			for (var i = 0; i <= 4; i++) {
+				this.difficultyButtons[i].addEventListener("click", gameInterface.activeGameDifficulty);
+			};
+		},
+		difficultyButtonListen: function() {
+			var difficultyContainer = document.getElementsByClassName("difficulty-options-container")[0];
 
-		var difficultyButton = document.getElementById("toggle-difficulty-options");
-		var difficultyContainer = document.getElementsByClassName("difficulty-options-container")[0];
-		difficultyButton.addEventListener("click", function() {
-
-			difficultyContainer.style.display = (difficultyContainer.dataset.toggled ^= 1) ? "block" : "none";
-		}, false);
-
+			this.difficultyButton.addEventListener("click", function() {
+				gameInterface.difficultyContainer.style.display = (gameInterface.difficultyContainer.dataset.toggled ^= 1) ? "block" : "none";
+			}, false);
 
 			for (var i = 0; i < difficultyContainer.children.length; i++) {
 
-				difficultyContainer.children[i].addEventListener("click", function(){
+				this.difficultyContainer.children[i].addEventListener("click", function(){
 					controller.gameDifficulty = this.value;
 				});
 			}
-
-		var difficultyButtons = document.getElementsByClassName("difficulty-buttons");
-		for (var i = 0; i <= 4; i++) {
-				difficultyButtons[i].addEventListener("click", activeGameDifficulty);
-		};
-
-		function activeGameDifficulty() {
-			if (!controller.gameStarted) {
+		},
+		activeGameDifficulty: function() {
+				if (!controller.gameStarted) {
 
 			for (var i = 0; i <= 4; i++) {
-				difficultyButtons[i].classList.remove("active");
+				gameInterface.difficultyButtons[i].classList.remove("active");
 			}
 
 				var difficulty = document.getElementById("difficulty-message");
@@ -422,8 +412,18 @@ document.addEventListener("DOMContentLoaded", function(event) {
 				controller.gameDifficulty = parseInt(this.value);
 				this.classList.add("active");
 			}
-		}
+		},
+		run: function() {
+			this.sizeButtonsListen();
+			this.startButtonListen();
+			this.restartButtonListen();
+			this.difficultyButtonListen();
+			this.difficultyButtonsListen();
 
+		}
+	}
+
+	gameInterface.run();
 });
 
 
