@@ -7,18 +7,18 @@ body {
 	font-family: 'Orbitron', sans-serif;
 }
 
-.container {
+#container {
 	position: relative;
 	width: 950px;
-	margin: 0 auto;
+	margin: 30px auto;
 }
 
-/*	.title {
-		font-size: 60px;
+	.title {
+		font-size: 55px;
 		color: #22ce11;
 		text-align: center;
-	}*/
-
+		letter-spacing: 5px;
+	}
 
 	#canvas {
 		display: block;
@@ -93,6 +93,26 @@ body {
 
 			#difficulty-message {
 				margin: 30px auto;
+				width: 160px;
+				text-align: left;
+				}
+
+				.controls-message {
+				margin: 30px auto;
+				width: 160px;
+				text-align: left;
+				}
+
+			.restart-message::before {
+				display: inline-block;
+				content: " ";
+				border-radius: 100%;
+
+				margin-right: 5px;
+				padding-right: 5px;
+				width: 6px;
+				height: 6px;
+				border: 1px solid green;
 			}
 
 			.restart-message {
@@ -100,6 +120,7 @@ body {
 				width: 160px;
 				text-align: left;
 			}
+
 
 			#score {
 				margin: 20px auto 5px;

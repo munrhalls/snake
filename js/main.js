@@ -256,8 +256,6 @@ document.addEventListener("DOMContentLoaded", function(event) {
 				snake.snakePositionY = 225;
 				snake.snakePathSize = 50;
 			}
-			console.log(controller.gameDifficulty)
-			console.log(model.gameSpeed);
 		},
 		prepareGame: function() {
 			snake.snakeLength = 1;
@@ -282,9 +280,12 @@ document.addEventListener("DOMContentLoaded", function(event) {
 			controller.game = window.requestAnimationFrame(controller.runGame);
 		},
 		start: function start() {
-			controller.gamePaused = false;
+			console.log("START")
 
 			if (!controller.gameStarted) {
+				controller.gamePaused = false;
+				controller.gameOver = false;
+				console.log("START AFTER CONDITIONAL - !gameStarted")
 				controller.gameStarted = true;
 				controller.prepareGame(model.gameSize);
 			}
@@ -302,6 +303,7 @@ document.addEventListener("DOMContentLoaded", function(event) {
 			display.pauseMsg();
 
 			window.cancelAnimationFrame(controller.game);
+			console.log("STOP")
 		},
 		restart: function() {
 			startButton.style.display = "block"
@@ -312,7 +314,7 @@ document.addEventListener("DOMContentLoaded", function(event) {
 			controller.gameStarted = false;
 			this.stop();
 			model.frames = 0;
-			this.prepareGame();
+			console.log("RESTART")
 		}
 	};
 
@@ -333,9 +335,6 @@ document.addEventListener("DOMContentLoaded", function(event) {
 				snake.userControl = snake.userControlPrevious;
 		}
 
-		if (e.keyCode === 13 && !controller.gameStarted) {
-			controller.start();
-		}
 
 		if (e.keyCode === 32) {
 			var flow = [controller.start, controller.stop];
@@ -372,11 +371,21 @@ document.addEventListener("DOMContentLoaded", function(event) {
 			controller.start();
 		});
 
+		document.addEventListener("keydown", function(e) {
+
+			if (e.keyCode === 13 && !controller.gameStarted) {
+				e.preventDefault();
+				startButton.style.display = "none"
+				controller.start();
+			}
+		});
+
 
 		var restartButton = document.getElementById("restart-btn")
 
-		restartButton.addEventListener("click", function() {
-			controller.restart();
+		restartButton.addEventListener("click", function(e) {
+				e.preventDefault();
+				controller.restart();
 		});
 
 
@@ -407,13 +416,16 @@ document.addEventListener("DOMContentLoaded", function(event) {
 			for (var i = 0; i <= 4; i++) {
 				difficultyButtons[i].classList.remove("active");
 			}
+
+				var difficulty = document.getElementById("difficulty-message");
+				difficulty.innerHTML = "Difficulty: " + this.innerHTML;
 				controller.gameDifficulty = parseInt(this.value);
-				console.log(controller.gameDifficulty)
 				this.classList.add("active");
 			}
 		}
 
-console.log
+
+
 
 });
 
