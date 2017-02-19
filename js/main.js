@@ -11,17 +11,15 @@ document.addEventListener("DOMContentLoaded", function(event) {
 			element.style.display = "none";
 		},
 		pauseMsg: function() {
-			console.log("Pause function")
-			console.log(!controller.gameStarted)
 			if (!controller.gameStarted) {
-				startButton.style.display = "block";
-				startButton.innerHTML = "Start <span class='start-pause-footnote'> Click or hit enter </span> "
+				userInterface.startButton.style.display = "block";
+				userInterface.startButton.innerHTML = "Start <span class='start-pause-footnote'> Click or hit enter </span> "
 			}
 			else if (controller.gamePaused) {
-				startButton.style.display = "block";
-				startButton.innerHTML = "Paused <span class='start-pause-footnote'> Click or hit spacebar </span> "
+				userInterface.startButton.style.display = "block";
+				userInterface.startButton.innerHTML = "Paused <span class='start-pause-footnote'> Click or hit spacebar </span> "
 			} else {
-				startButton.style.display = "none";
+				userInterface.startButton.style.display = "none";
 			}
 		},
 		displayScore: function(snakeLength) {
@@ -47,7 +45,6 @@ document.addEventListener("DOMContentLoaded", function(event) {
 		userControl: 39,
 		snakeSize: 8,
 		snakeColor: "#13c512",
-
 		createSnake: function(x, y) {
 			this.snakeLife();
 		  context.beginPath();
@@ -131,7 +128,7 @@ document.addEventListener("DOMContentLoaded", function(event) {
 		squaresPerRow: 50,
 		squaresNum: 0,
 		gameSize: "Normal",
-		gameSpeed: -5,
+		gameSpeed: 0,
 		isGridSizeValid: function() {
 
 			if (250000 % this.gridSize === 0) {
@@ -172,7 +169,6 @@ document.addEventListener("DOMContentLoaded", function(event) {
 
 		},
 		createBoard: function() {
-
 				var canvas = document.getElementById("canvas");
 				context = canvas.getContext("2d");
 				context.clearRect(0, 0, 500, 500);
@@ -183,7 +179,6 @@ document.addEventListener("DOMContentLoaded", function(event) {
 			this.foodLocation[1] = (Math.floor(Math.random()	* (squaresPerRow - 1)) + 1) * this.gridSize - this.gridSize / 2
 		},
 		generateFood: function() {
-
 			this.styleFood();
 			context.beginPath();
 			context.fillStyle = this.foodColor;
@@ -200,7 +195,6 @@ document.addEventListener("DOMContentLoaded", function(event) {
 				this.foodColor = "#ccc800";
 			}
 		}
-
 	};
 
 	var controller = {
@@ -211,7 +205,6 @@ document.addEventListener("DOMContentLoaded", function(event) {
 		gameOver: false,
 		checkCollision: function(snakeBlocks, ignoreFood) {
 			var currentLocation = snakeBlocks[0];
-
 			this.checkWalls(currentLocation);
 
 			for (var i = 1 + ignoreFood; i < snake.snakeLength; i++) {
@@ -276,20 +269,16 @@ document.addEventListener("DOMContentLoaded", function(event) {
 			model.frames++;
 			if (model.frames % model.gameSpeed === 0) {
 				if (!controller.gamePaused && controller.gameStarted) {
-					console.log("Run")
 					snake.clearSnake();
 					model.generateFood();
 					snake.updateSnake(snake.userControl);
 					display.displayScore(snake.snakeLength);
 				}
 			}
-			console.log("running")
 			controller.game = window.requestAnimationFrame(controller.runGame);
 		},
 		start: function start() {
-
 			if (!controller.gameStarted) {
-				console.log("START")
 				controller.gameStarted = true;
 				controller.prepareGame(model.gameSize);
 			}
@@ -297,7 +286,6 @@ document.addEventListener("DOMContentLoaded", function(event) {
 			display.hideMsg("start-btn");
 			restartButton.style = "box-shadow: 0 0 15px 10px #104201";
 			restartButton.style.fontWeight = "normal";
-
 			controller.runGame();
 
 		},
@@ -306,10 +294,8 @@ document.addEventListener("DOMContentLoaded", function(event) {
 				controller.gamePaused = true;
 			}
 
-			var startButton = document.getElementsByClassName("start-btn");
 			display.pauseMsg();
 			window.cancelAnimationFrame(controller.game);
-			console.log("Stop")
 		},
 		restart: function() {
 			if (controller.gameStarted = true) {
@@ -317,8 +303,8 @@ document.addEventListener("DOMContentLoaded", function(event) {
 				controller.gameStarted = false;
 			}
 			controller.gameOver = false;
-			startButton.style.display = "block";
-				startButton.innerHTML = "Start <span class='start-pause-footnote'> Click or hit enter </span> "
+			userInterface.startButton.style.display = "block";
+			userInterface.startButton.innerHTML = "Start <span class='start-pause-footnote'> Click or hit enter </span> "
 			snake.userControl = 39;
 
 			var msg = display.displayMsg("");
@@ -328,8 +314,6 @@ document.addEventListener("DOMContentLoaded", function(event) {
 			model.frames = 0;
 		}
 	};
-
-
 
 	document.addEventListener("keydown", function(e){
 		if (controller.gameStarted) {
@@ -355,39 +339,49 @@ document.addEventListener("DOMContentLoaded", function(event) {
 		if (e.keyCode === 13) {
 				e.preventDefault();
 				if (!controller.gameStarted && !controller.gameOver) {
-					startButton.style.display = "none"
+					userInterface.startButton.style.display = "none"
 					controller.start();
-
 				}
 			}
 
 	}, false);
 
 
-		var sizeButtons = document.getElementsByClassName("size-buttons");
-		for (var i = 0; i <= 2; i++) {
-				sizeButtons[i].addEventListener("click", activeGameSize);
-		};
-
-		function activeGameSize() {
+	var userInterface =  {
+		sizeButtons: document.getElementsByClassName("size-buttons"),
+		sizeButtonsListen: function() {
+			for (var i = 0; i <= 2; i++) {
+				this.sizeButtons[i].addEventListener("click", userInterface.activeGameSize);
+			};
+		},
+		activeGameSize: function() {
 			if (!controller.gameStarted) {
 
 			for (var i = 0; i <= 2; i++) {
-				sizeButtons[i].classList.remove("active");
+				userInterface.sizeButtons[i].classList.remove("active");
 			}
 				model.gameSize = this.innerHTML;
 				this.classList.add("active");
 			}
-		}
+		},
+		startButton: document.getElementById("start-btn"),
+		startButtonListen: function() {
+			this.startButton.addEventListener("click", function(e) {
+				e.preventDefault();
+				this.style.display = "none"
+				controller.start();
+			});
+		},
 
-		var startButton = document.getElementById("start-btn");
 
-		startButton.addEventListener("click", function(e) {
-			e.preventDefault();
-			this.style.display = "none"
-			controller.start();
-			console.log("Start from click")
-		});
+	}
+
+	userInterface.sizeButtonsListen();
+	userInterface.startButtonListen();
+
+
+
+
 
 
 		var restartButton = document.getElementById("restart-btn")
