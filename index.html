@@ -10,11 +10,11 @@
   </head>
   <body>
   	<div id="container">
+  		<h1 class="title">SNAKE</h1>
   		<canvas id="canvas" width="500px" height="500px" moz-opaque></canvas>
-  		<h1 class="title"1>SNAKE</h1>
-  		<h2 id="message"></h2>
 
-  		<button id="start-btn" type="button">Start<span class="start-pause-footnote">Click or hit enter</span>
+  		<h2 id="message"></h2>
+  		<button id="start-btn" type="button">Start<span class="start-btn-footnote">Click or hit enter</span>
 			</button>
 
   		<div class="game-info-container">
@@ -22,31 +22,29 @@
 				<div id="score"><p>Score: 0 points</p></div>
 				<button id="restart-btn" type="button">Restart</button>
 				<h2 class="controls-message">Controls:</h2>
-				<h2 class="restart-message">Click restart to play a new game.</h2>
-				<h2 class="restart-message">Press space to pause.</h2>
-				<h2 class="restart-message">Use keyboard arrows to move the snake.</h2>
+				<h3 class="info-messages">Click restart to play a new game.</h3>
+				<h3 class="info-messages">Press space to pause.</h3>
+				<h3 class="info-messages">Use keyboard arrows to move the snake.</h3>
   		</div>
 
-			<div id="size-options-container">
-			<h2 id="game-size-label">Difficulty options <span class="game-size-footnote">(click to toggle menu)</span></h2>
-
+			<div id="options-container">
+				<label class="game-size-label">Difficulty options <span class="game-size-footnote">(click to toggle menu)</span></label>
 				<button id="toggle-difficulty-options" id="difficulty-option-1">Choose difficulty</button>
 				<div class="difficulty-options-container">
-					<button class="difficulty-buttons" id="difficulty-option-1" value="-10">Easy</button>
-					<button class="difficulty-buttons" id="difficulty-option-2" value="0">Normal</button>
-					<button class="difficulty-buttons" id="difficulty-option-3" value="1">Hard
+					<button class="difficulty-buttons options-buttons" id="difficulty-option-1" value="-10">Easy</button>
+					<button class="difficulty-buttons options-buttons" id="difficulty-option-2" value="0">Normal</button>
+					<button class="difficulty-buttons options-buttons" id="difficulty-option-3" value="1">Hard
 					</button>
-					<button class="difficulty-buttons" id="difficulty-option-4" value="2">Insane</button>
-					<button class="difficulty-buttons" id="difficulty-option-5" value="5">Absurd</button>
+					<button class="difficulty-buttons options-buttons" id="difficulty-option-4" value="2">Insane</button>
+					<button class="difficulty-buttons options-buttons" id="difficulty-option-5" value="5">Absurd</button>
 				</div>
-
-				<h2 id="game-size-label">Size options <span class="game-size-footnote">(click to change)</span></h2>
-
-  			<button class="size-buttons" id="size-option-1">Mini</button>
-  			<button class="size-buttons active" id="size-option-2">Normal</button>
-  			<button class="size-buttons" id="size-option-3">Gargantuan</button>
+				<div class="size-options-container">
+					<h2 class="game-size-label size-options-label">Size options <span class="game-size-footnote">(click to change)</span></h2>
+  				<button class="size-buttons options-buttons" id="size-option-1">Mini</button>
+	  			<button class="size-buttons options-buttons active" id="size-option-2">Normal</button>
+	  			<button class="size-buttons options-buttons" id="size-option-3">Gargantuan</button>
+  			</div>
 			</div>
-
 
   		<div id="grid">
   		</div>

@@ -13,11 +13,11 @@ document.addEventListener("DOMContentLoaded", function(event) {
 		pauseMsg: function() {
 			if (!controller.gameStarted) {
 				gameInterface.startButton.style.display = "block";
-				gameInterface.startButton.innerHTML = "Start <span class='start-pause-footnote'> Click or hit enter </span> "
+				gameInterface.startButton.innerHTML = "Start <span class='start-btn-footnote'> Click or hit enter </span> "
 			}
 			else if (controller.gamePaused) {
 				gameInterface.startButton.style.display = "block";
-				gameInterface.startButton.innerHTML = "Paused <span class='start-pause-footnote'> Click or hit spacebar </span> "
+				gameInterface.startButton.innerHTML = "Paused <span class='start-btn-footnote'> Click or hit spacebar </span> "
 			} else {
 				gameInterface.startButton.style.display = "none";
 			}
@@ -304,7 +304,7 @@ document.addEventListener("DOMContentLoaded", function(event) {
 			}
 			controller.gameOver = false;
 			gameInterface.startButton.style.display = "block";
-			gameInterface.startButton.innerHTML = "Start <span class='start-pause-footnote'> Click or hit enter </span> "
+			gameInterface.startButton.innerHTML = "Start <span class='start-btn-footnote'> Click or hit enter </span> "
 			snake.userControl = 39;
 
 			var msg = display.displayMsg("");

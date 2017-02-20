@@ -25,7 +25,6 @@ body {
 		position: absolute;
 		top: 75px;
 		left: calc(50% - 250px);
-		/*border: 1px solid #104201;*/
 		box-shadow: 0 0 15px 5px #104201;
 		margin: 0 auto;
 		background-color: #034a0a;
@@ -68,7 +67,7 @@ body {
 		z-index: 100;
 	}
 
-	.start-pause-footnote {
+	.start-btn-footnote {
 		padding-top: 5px;
 		display: block;
 		font-size: 11px;
@@ -103,19 +102,20 @@ body {
 				text-align: left;
 				}
 
-			.restart-message::before {
+			.info-messages::before {
 				display: inline-block;
 				content: " ";
 				border-radius: 100%;
-
-				margin-right: 5px;
+				box-shadow: 0 0 12.5px 6px #104201;
+				vertical-align: middle;
+				margin: -2px 5px 0 0;
 				padding-right: 5px;
 				width: 6px;
 				height: 6px;
 				border: 1px solid green;
 			}
 
-			.restart-message {
+			.info-messages {
 				margin: 30px auto;
 				width: 160px;
 				text-align: left;
@@ -146,7 +146,8 @@ body {
 				font-size: 16px;
 			}
 
-	#size-options-container {
+
+	#options-container {
 		display: block;
 		position: absolute;
 		top: 75px;
@@ -160,13 +161,25 @@ body {
 		font-size: 16px;
 	}
 
-		#game-size-label {
+	.options-buttons {
+				margin: 20px auto 5px;
+				padding: 5px;
+				width: 160px;
+				height: 45px;
+				box-shadow: 0 0 15px 10px #104201;
+				border-radius: 10px;
+				background-color: #000;
+				color: #fff;
+				font-size: 16px;
+			}
+
+
+		.game-size-label {
 			display: block;
 			margin: 20px auto 5px;
 			padding: 5px;
 			width: 160px;
 			height: 45px;
-
 			border-radius: 10px;
 			background-color: #000;
 			color: #22ce11;
@@ -186,7 +199,6 @@ body {
 			padding: 5px;
 			width: 160px;
 			height: 45px;
-
 			border-radius: 10px;
 			background-color: #000;
 			color: #22ce11;
@@ -210,33 +222,10 @@ body {
 			background-color: #000;
 			display: none;
 		}
-			.difficulty-buttons {
-				margin: 20px auto 5px;
-				padding: 5px;
-				width: 160px;
-				height: 45px;
-				box-shadow: 0 0 15px 10px #104201;
-				border-radius: 10px;
-				background-color: #000;
-				color: #fff;
-				font-size: 16px;
-			}
 
-
-
-
-
-
-			.size-buttons {
-				margin: 20px auto 5px;
-				padding: 5px;
-				width: 160px;
-				height: 45px;
-				box-shadow: 0 0 15px 10px #104201;
-				border-radius: 10px;
-				background-color: #000;
-				color: #fff;
-				font-size: 16px;
+			.size-options-label {
+				margin-top: 50px;
+				margin-bottom: 10px;
 			}
 
 
