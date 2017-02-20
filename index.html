@@ -12,8 +12,8 @@
   	<div id="container">
   		<section class="game-container">
   			<h1 class="title">SNAKE</h1>
-  			<canvas id="canvas" width="500px" height="500px" moz-opaque></canvas>
-	  		<h2 id="message"></h2>
+  			<canvas id="canvas" width="500" height="500"></canvas>
+	  		<h2 id="message"> </h2>
 	  		<button id="start-btn" type="button">Start<span class="start-btn-footnote">Click or hit enter</span>
 				</button>
   		</section>
@@ -26,9 +26,9 @@
 				<h3 class="info-messages">Press space to pause.</h3>
 				<h3 class="info-messages">Use keyboard arrows to move the snake.</h3>
   		</section>
-			<section id="options-container">
-				<label class="game-size-label">Difficulty options <span class="game-size-footnote">(click to toggle menu)</span></label>
-				<button id="toggle-difficulty-options" id="difficulty-option-1">Choose difficulty</button>
+			<div id="options-container">
+				<h2 class="game-size-label">Difficulty options <span class="game-size-footnote">(click to toggle menu)</span></h2>
+				<button id="toggle-difficulty-options">Choose difficulty</button>
 				<section class="difficulty-options-container">
 					<button class="difficulty-buttons options-buttons" id="difficulty-option-1" value="-10">Easy</button>
 					<button class="difficulty-buttons options-buttons" id="difficulty-option-2" value="0">Normal</button>
@@ -43,7 +43,7 @@
 	  			<button class="size-buttons options-buttons active" id="size-option-2">Normal</button>
 	  			<button class="size-buttons options-buttons" id="size-option-3">Gargantuan</button>
   			</section>
-			</section>
+			</div>
   		<div id="grid">
   		</div>
   	</div>
