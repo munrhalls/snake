@@ -1,7 +1,5 @@
 # snake 
 
-<strong> Game written in pure Javascript. </strong> 
-
 The main objective of the project was exercising my Javascript skills, including its application in the DOM. Project created after completing my first book on Javascript ("Headfirst Javascript Programming" by E. Freeman, E. Robson). 
 
 <strong> Game features: </strong>
