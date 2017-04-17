@@ -1,6 +1,6 @@
 # snake 
 
-The main objective of the project was exercising my Javascript skills, including its application in the DOM.
+The main objective of the project was exercising my Javascript skills, including its application in the DOM. It was the first larger project I did entirely on my own. Started it after finishing my first book on Javascript ("Headfirst Javascript Programming", E. Robson, E. Freeman).
 
 <strong> Game features: </strong>
 - interface - buttons for selecting game options,
