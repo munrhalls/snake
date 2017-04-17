@@ -13,7 +13,7 @@ The main objective of the project was exercising my Javascript skills, including
 <strong> Main challenges: </strong>
 - The grid - it was a struggle to match the snake size and snake speed to different grid sizes, 
 - The snake - the project was above my skills at the time - it took a lot of experimentation to understand how the snake needs to work, 
-- The book I had completed didn't cover a lot of aspects that were essential for the project, for example the window.requestAnimationFrame; a lot of research was required, 
+- The book I had completed didn't cover a lot of aspects that were essential for the project, especially related to performance/fixing lag issues - for example the window.requestAnimationFrame; for a novice like me - a lot of research and googling was required.
 
 <strong> Lessons learned: </strong>
 - Planning - I started coding too soon, before the plan for game's logic was complete - as a result, later on I had to fix problems with game's logic when a lot of code was already written, 
